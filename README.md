@@ -33,11 +33,11 @@ Now there are certain functions that you have to input in the console before sta
 Besides all of this, there are certain optional options that may be useful when importing/placing assets.
 
 1. UE4Script.lod(True or False) - Tells the script if the props end with “_LOD0” or not.
- * This function is set to True by default.
- * Important: If you change this value, import props, and close UE, the next time you open UE you will have to set it to whatever value you had before closing the program in order to be able to place props.
+  * This function is set to True by default.
+  * Important: If you change this value, import props, and close UE, the next time you open UE you will have to set it to whatever value     you had before closing the program in order to be able to place props.
 2. UE4Script.savepath(r’path’) - Lets you select the location in which the files will be saved/are saved inside UE.
- * This function is set to “CoD/xmodels/” by default.
- * Important: If you change the path, import props, and close UE, the next time you open UE you will have to set it to whatever path you    had before closing the program in order to be able to place props.
+   * This function is set to “CoD/xmodels/” by default.
+   * Important: If you change the path, import props, and close UE, the next time you open UE you will have to set it to whatever path        you had before closing the program in order to be able to place props.
 
 
  Once you have done all of this you can type UE4Script.ImportAssets() to start importing all props.
