@@ -47,13 +47,9 @@ When the import is done (and you want to place assets) create a new empty level 
 
 Unreal will freeze for about 5 to 10 minutes, don't panic. This is normal since it is placing hundreds of assets. If you want to know when it's done just open the task manager and when it stops saying “Not responding” it means it is done. ( In future updates I plan to add a progress bar.) You will notice all the props have been placed. Now just import the map geometry and done. You now have a Call of Duty map importer on Unreal Engine.
 
-Note: Sometimes the map may be flipped in the Y axis. To fix this make a cube, put it at the coordinates 0,0,0, parent all props (and map geometry) to it and set the Y axis to -1.
-
-
-
+*Note: Sometimes the map may be flipped in the Y axis. To fix this make a cube, put it at the coordinates 0,0,0, parent all props (and map geometry) to it and set the Y axis to -1.*
 
 In a non so distant future I will be implementing the script as a plugin for UE, this way its more user-friendly. For now I prefer to release this way so it can be tested on all cods, so bugs can be fixed, etc. 
-
 
 # EXTRA INFO:
 As of now the tool can import all games that Husky can make a .map of.  The tool has not been tested with all CoDs yet so there may be some bugs, if so please make sure to report it.
