@@ -27,8 +27,10 @@ Now there are certain functions that you have to input in the console before sta
 1. UE4Script.jsonfile(r’Location/mp_mapname.json’) - Location of the .json file that C2M created.
  *Make sure to not delete the r’’ inside the parenthesis. Put the location inside the quotes.
  *Also make sure to add “/mp_mapname.json” at the end. This tells the script the name/extension of the file.
+ 
 2. UE4Script.xmodels(r’Location’) - Location of the xmodels folder created by Greyhound.
  *Make sure to not delete the r’’ inside the parenthesis. Put the location inside the quotes.
+
 
 Besides all of this, there are certain optional options that may be useful when importing/placing assets.
 
@@ -36,6 +38,7 @@ Besides all of this, there are certain optional options that may be useful when 
    * This function is set to True by default.
    * Important: If you change this value, import props, and close UE, the next time you open UE you will have to set it to whatever
      value you had before closing the program in order to be able to place props.
+     
 2. UE4Script.savepath(r’path’) - Lets you select the location in which the files will be saved/are saved inside UE.
    * This function is set to “CoD/xmodels/” by default.
    * Important: If you change the path, import props, and close UE, the next time you open UE you will have to set it to whatever path        you had before closing the program in order to be able to place props.
