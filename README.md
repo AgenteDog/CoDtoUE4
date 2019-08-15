@@ -22,7 +22,7 @@ In the additional paths just paste the location of where the UE4Script is locate
 
 Now there are certain functions that you **have** to input in the console **before** starting to import/place assets.
 
-1. UE4Script.jsonfile(r’*Location/mp_mapname.json*’) - Location of the .json file that C2M created.
+1. UE4Script.jsonfile(r’*Location/mp_mapname_xmodels.json*’) - Location of the .json file that C2M created.
    * Make sure to not delete the r’’ inside the parenthesis. Put the location inside the quotes.
    * Also make sure to add “/mp_mapname.json” at the end. This tells the script the name/extension of the file.
  
