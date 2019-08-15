@@ -3,7 +3,7 @@ If you need help/assistance make sure to join this Discord server: https://disco
 
 In case you are wondering, this tool works for Unreal Engine 4.21 or above.
 
-#HOW TO USE
+# HOW TO USE
 
 First you will need C2M and Greyhound to export the assets needed. The download links for both of these programs are in this download in the form of a shortcut. First use C2M.
 
@@ -55,7 +55,7 @@ Note: Sometimes the map may be flipped in the Y axis. To fix this make a cube, p
 In a non so distant future I will be implementing the script as a plugin for UE, this way its more user-friendly. For now I prefer to release this way so it can be tested on all cods, so bugs can be fixed, etc. 
 
 
-#EXTRA INFO:
+# EXTRA INFO:
 As of now the tool can import all games that Husky can make a .map of.  The tool has not been tested with all CoDs yet so there may be some bugs, if so please make sure to report it.
 
  The materials are imported like any other material would do, right now I don't use any type of master material to make instances of.  This tool is still in development and many changes, bug fixes, and etc will come.
