@@ -4,7 +4,7 @@ In case you are wondering, this tool works for Unreal Engine 4.21 or above.
 
 # HOW TO USE
 
-First you will need [C2M](https://github.com/sheilan102/C2M) and [Greyhound](https://github.com/Scobalula/Greyhound) to export the assets needed. The download links for both of these programs are in this download in the form of a shortcut. First use C2M.
+First you will need [C2M](https://github.com/sheilan102/C2M) and [Greyhound](https://github.com/Scobalula/Greyhound) to export the assets needed. First use C2M:
 
 It will create 2 files (that are important);
 mp_mapname_xmodelList.txt - Use this file as a filter in Greyhound to extract necessary models only
