@@ -14,15 +14,13 @@ Then you have to use Greyhound to export assets like the map geometry or the pro
 
 Now open Unreal Engine. Create a new project ( or open one if you want to ) and go to the plugin options. Here activate the Scripting plugins. To do this just “Click settings in the toolbar > Plugins > Scroll Down on the built in section > Scripting” and activate all in there.
 
-
-
- It will ask you to restart the program so just click restart. After the project has loaded again go to “Edit > Project Settings” and scroll to the bottom.
+It will ask you to restart the program so just click restart. After the project has loaded again go to “Edit > Project Settings” and scroll to the bottom.
 
 In the additional paths just paste the location of where the UE4Script is located and activate Developer mode. It will ask you again to restart the project so just click restart.
 
  After this open the output log (Windows > Developer Tools > Output log) and choose Python. Now just type “import UE4Script” and hit enter.
 
-Now there are certain functions that you have to input in the console before starting to import/place assets.
+Now there are certain functions that you **have** to input in the console **before** starting to import/place assets.
 
 1. UE4Script.jsonfile(r’Location/mp_mapname.json’) - Location of the .json file that C2M created.
    * Make sure to not delete the r’’ inside the parenthesis. Put the location inside the quotes.
@@ -31,7 +29,7 @@ Now there are certain functions that you have to input in the console before sta
 2. UE4Script.xmodels(r’Location’) - Location of the xmodels folder created by Greyhound.
    * Make sure to not delete the r’’ inside the parenthesis. Put the location inside the quotes.
 
-Besides all of this, there are certain optional options that may be useful when importing/placing assets.
+Besides all of this, there are certain **optional** options that may be useful when importing/placing assets.
 
 1. UE4Script.lod(True or False) - Tells the script if the props end with “_LOD0” or not.
    * This function is set to True by default.
