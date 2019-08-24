@@ -55,7 +55,7 @@ def PlaceAssets():
         print('You need to add a location for the json_file.')
 
 
-
+props = []
 def ImportAssets():
     if json_file is not None:
         if map_folder is not None:
@@ -63,14 +63,26 @@ def ImportAssets():
                 entities = json.load(file)
             if _LOD0 == True:
                 for info in entities:
-                    static_mesh = map_folder + '/' + info['Name'] + '/' + info['Name'] + '_LOD0.obj'
-                    static_mesh_task = buildImportTask(static_mesh, '/Game/' + editorpath + info['Name'], buildStaticMeshImportOptions())
-                    executeImportTasks([static_mesh_task])
+                    prop = {}
+                    prop['Prop'] = info['Name']
+                    if prop not in props:
+                        static_mesh = map_folder + '/' + info['Name'] + '/' + info['Name'] + '_LOD0.obj'
+                        static_mesh_task = buildImportTask(static_mesh, '/Game/' + editorpath + info['Name'], buildStaticMeshImportOptions())
+                        executeImportTasks([static_mesh_task])
+                        props.append(prop)
+                    else:
+                        continue
             elif _LOD0 == False:
                 for info in entities:
-                    static_mesh = map_folder + '/' + info['Name'] + '/' + info['Name'] + '.obj'
-                    static_mesh_task = buildImportTask(static_mesh, '/Game/' + editorpath + info['Name'], buildStaticMeshImportOptions())
-                    executeImportTasks([static_mesh_task])
+                    prop = {}
+                    prop['Prop'] = info['Name']
+                    if prop not in props:
+                        static_mesh = map_folder + '/' + info['Name'] + '/' + info['Name'] + '.obj'
+                        static_mesh_task = buildImportTask(static_mesh, '/Game/' + editorpath + info['Name'], buildStaticMeshImportOptions())
+                        executeImportTasks([static_mesh_task])
+                        props.append(prop)
+                    else:
+                        continue
         else:
             print('You need to add a location for the xmodels folder.')
     else:
