@@ -36,19 +36,19 @@ def PlaceAssets():
         with open(json_file, 'r') as file:
             entities = json.load(file)
         if _LOD0 == True:
-            for info in entities:
-                actor_class = unreal.EditorAssetLibrary.load_asset("StaticMesh'" + '/Game/' + editorpath + '/' + info['Name'] + '/' + info['Name'] + '_LOD0' + '.' + info['Name'] + "_LOD0'")
-                actor_location = float(info['PosX']) * 2.54, float(info['PosY']) * 2.54, float(info['PosZ']) * 2.54
-                actor_rotation = float(info['RotX']), float(info['RotY']), float(info['RotZ'])
-                actor_scale = float(info['Scale']), -(float(info['Scale'])), float(info['Scale'])
+            for propinfo in entities:
+                actor_class = unreal.EditorAssetLibrary.load_asset("StaticMesh'" + '/Game/' + editorpath + propinfo['Name'] + '/' + propinfo['Name'] + '_LOD0' + '.' + propinfo['Name'] + "_LOD0'")
+                actor_location = float(propinfo['PosX']) * 2.54, float(propinfo['PosY']) * 2.54, float(propinfo['PosZ']) * 2.54
+                actor_rotation = (float(propinfo['RotY'])), float(propinfo['RotZ']), -(float(propinfo['RotX']))
+                actor_scale = float(propinfo['Scale']), -(float(propinfo['Scale'])), float(propinfo['Scale'])
                 myActor = unreal.EditorLevelLibrary.spawn_actor_from_object(actor_class, actor_location, actor_rotation)
                 myActor.root_component.set_relative_scale3d(actor_scale)
         elif _LOD0 == False:
-            for info in entities:
-                actor_class = unreal.EditorAssetLibrary.load_asset("StaticMesh'" + '/Game/' + editorpath + info['Name'] + '/' + info['Name'] + '.' + info['Name'])
-                actor_location = float(info['PosX']) * 2.54, float(info['PosY']) * 2.54, float(info['PosZ']) * 2.54
-                actor_rotation = float(info['RotX']), float(info['RotY']), float(info['RotZ'])
-                actor_scale = float(info['Scale']), -(float(info['Scale'])), float(info['Scale'])
+            for propinfo in entities:
+                actor_class = unreal.EditorAssetLibrary.load_asset("StaticMesh'" + '/Game/' + editorpath + propinfo['Name'] + '/' + propinfo['Name'] + '.' + propinfo['Name'])
+                actor_location = float(propinfo['PosX']) * 2.54, float(propinfo['PosY']) * 2.54, float(propinfo['PosZ']) * 2.54
+                actor_rotation = -(float(propinfo['RotY'])), float(propinfo['RotZ']), -(float(propinfo['RotX']))
+                actor_scale = float(propinfo['Scale']), -(float(propinfo['Scale'])), float(propinfo['Scale'])
                 myActor = unreal.EditorLevelLibrary.spawn_actor_from_object(actor_class, actor_location, actor_rotation)
                 myActor.root_component.set_relative_scale3d(actor_scale)
     else:
@@ -62,23 +62,23 @@ def ImportAssets():
             with open(json_file, 'r') as file:
                 entities = json.load(file)
             if _LOD0 == True:
-                for info in entities:
+                for propinfo in entities:
                     prop = {}
-                    prop['Prop'] = info['Name']
+                    prop['Prop'] = propinfo['Name']
                     if prop not in props:
-                        static_mesh = map_folder + '/' + info['Name'] + '/' + info['Name'] + '_LOD0.obj'
-                        static_mesh_task = buildImportTask(static_mesh, '/Game/' + editorpath + info['Name'], buildStaticMeshImportOptions())
+                        static_mesh = map_folder + '/' + propinfo['Name'] + '/' + propinfo['Name'] + '_LOD0.obj'
+                        static_mesh_task = buildImportTask(static_mesh, '/Game/' + editorpath + propinfo['Name'], buildStaticMeshImportOptions())
                         executeImportTasks([static_mesh_task])
                         props.append(prop)
                     else:
                         continue
             elif _LOD0 == False:
-                for info in entities:
+                for propinfo in entities:
                     prop = {}
-                    prop['Prop'] = info['Name']
+                    prop['Prop'] = propinfo['Name']
                     if prop not in props:
-                        static_mesh = map_folder + '/' + info['Name'] + '/' + info['Name'] + '.obj'
-                        static_mesh_task = buildImportTask(static_mesh, '/Game/' + editorpath + info['Name'], buildStaticMeshImportOptions())
+                        static_mesh = map_folder + '/' + propinfo['Name'] + '/' + propinfo['Name'] + '.obj'
+                        static_mesh_task = buildImportTask(static_mesh, '/Game/' + editorpath + propinfo['Name'], buildStaticMeshImportOptions())
                         executeImportTasks([static_mesh_task])
                         props.append(prop)
                     else:
