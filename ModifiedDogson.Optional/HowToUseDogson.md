@@ -1,4 +1,6 @@
 # HOW TO USE
+*First of all instead of writing UE4Script.command() on Unreal Engine you have to write UE4Script.DogSon.command(). If you have already read the docs on how to use the script it will make sense to you.
+
 This tool is a very simple tool to use.  
  
 Before starting: Every time after you drag and drop something you will have to press enter. 
