@@ -1,5 +1,6 @@
 import unreal
 import json
+import math
 
 json_file = None
 def jsonfile(filejson):
@@ -39,16 +40,22 @@ def PlaceAssets():
             for propinfo in entities:
                 actor_class = unreal.EditorAssetLibrary.load_asset("StaticMesh'" + '/Game/' + editorpath + propinfo['Name'] + '/' + propinfo['Name'] + '_LOD0' + '.' + propinfo['Name'] + "_LOD0'")
                 actor_location = float(propinfo['PosX']) * 2.54, float(propinfo['PosY']) * 2.54, float(propinfo['PosZ']) * 2.54
-                actor_rotation = (float(propinfo['RotY'])), float(propinfo['RotZ']), -(float(propinfo['RotX']))
-                actor_scale = float(propinfo['Scale']), -(float(propinfo['Scale'])), float(propinfo['Scale'])
+                RotX = (float(propinfo['RotX'])) * 180/math.pi
+                RotY = (float(propinfo['RotY'])) * 180/math.pi
+                RotZ = (float(propinfo['RotZ'])) * 180/math.pi
+                actor_rotation = RotY, RotZ, RotX
+                actor_scale = float(propinfo['Scale']), -(float(propinfo['Scale'])), (float(propinfo['Scale']))
                 myActor = unreal.EditorLevelLibrary.spawn_actor_from_object(actor_class, actor_location, actor_rotation)
                 myActor.root_component.set_relative_scale3d(actor_scale)
         elif _LOD0 == False:
             for propinfo in entities:
                 actor_class = unreal.EditorAssetLibrary.load_asset("StaticMesh'" + '/Game/' + editorpath + propinfo['Name'] + '/' + propinfo['Name'] + '.' + propinfo['Name'])
                 actor_location = float(propinfo['PosX']) * 2.54, float(propinfo['PosY']) * 2.54, float(propinfo['PosZ']) * 2.54
-                actor_rotation = -(float(propinfo['RotY'])), float(propinfo['RotZ']), -(float(propinfo['RotX']))
-                actor_scale = float(propinfo['Scale']), -(float(propinfo['Scale'])), float(propinfo['Scale'])
+                RotX = (float(propinfo['RotX'])) * 180/math.pi
+                RotY = (float(propinfo['RotY'])) * 180/math.pi
+                RotZ = (float(propinfo['RotZ'])) * 180/math.pi
+                actor_rotation = RotY, RotZ, RotX
+                actor_scale = (float(propinfo['Scale'])), -(float(propinfo['Scale'])), (float(propinfo['Scale']))
                 myActor = unreal.EditorLevelLibrary.spawn_actor_from_object(actor_class, actor_location, actor_rotation)
                 myActor.root_component.set_relative_scale3d(actor_scale)
     else:
