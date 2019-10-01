@@ -1,3 +1,7 @@
+**Important**
+I DO NOT this tool being used to put maps in other games that are not cod in any way, shape or form. 
+
+
 If you need help/assistance make sure to join this Discord server: https://discordapp.com/invite/wUqukba
 
 In case you are wondering, this tool works for Unreal Engine 4.21 or above.
