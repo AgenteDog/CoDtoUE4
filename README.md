@@ -15,7 +15,9 @@ I did this script on UE4.21, I am sure that (as long as UnrealEnginePython has a
 
 I havent tried it in older versions but feel free to try!
 
-## You will need:
+## Before using the script
+
+### You will need to download:
 
 - [UnrealEnginePython](https://github.com/20tab/UnrealEnginePython) (Plugin that will run the script)
 - [Greyhound](https://github.com/Scobalula/Greyhound/releases) (Used to export models/textures from the games)
@@ -23,8 +25,6 @@ I havent tried it in older versions but feel free to try!
 
 If you want to know/learn how to use the UnrealEnginePython plugin they have lots of documentation! Also, running the script is pretty much just copy/pasting and editing a few values.
 *Same thing for C2M and Greyhound.*
-
-## Before using the script
 
 ### Steps to take before actually using the script:
 
@@ -37,7 +37,7 @@ If you want to know/learn how to use the UnrealEnginePython plugin they have lot
  Tip: Do not rename any of the files.
  Tip2: If you get any missing textures while importing I would recommend you to just export all the game textures and put them in the textures folder inside the _images folder.
  
- ### Steps to take before actually using the script (in UE4):
+### Steps to take before actually using the script (in UE4):
  
  Just paste all files inside the UE4MasterMats folder (from **UE4MasterMats.zip**) in your content folder.
  
