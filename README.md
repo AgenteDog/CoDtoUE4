@@ -27,7 +27,7 @@ If you want to know/learn how to use the UnrealEnginePython plugin they have lot
 
 Still: running the script is pretty much just copy/pasting and editing a few values. Just open the plugin and you will see a code editor, just make a new file and paste one of the two scripts. There you can edit the values if you want too. Then just hit run and thats it. (You will have to do this for both placing and importing, but like I said it takes literal seconds.)
 
-Tip: You should get an embedded version of the UnrealeEnginePython plugin if you are just looking to run the script. Embedded versions are versions of the plugin that come with python so that you dont need to have python installed on your computer.
+Tip: You should get an embedded version of the UnrealeEnginePython plugin if you are just looking to run the script. Embedded versions are versions of the plugin that come with python so that you dont need to have python installed on your computer. Also, you should get the latest python version avialable. (currently python 3.7)
 
 ### Steps to take before actually using the script:
 
