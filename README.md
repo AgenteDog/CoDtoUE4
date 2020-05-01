@@ -19,7 +19,7 @@ I havent tried it in older versions but feel free to try!
 
 ### You will need to download:
 
-- [UnrealEnginePython](https://github.com/20tab/UnrealEnginePython) (Plugin that will run the script)
+- [UnrealEnginePython](https://github.com/20tab/UnrealEnginePython) (Plugin that will run the script) (You should get an embedded version if you are just looking to run the script)
 - [Greyhound](https://github.com/Scobalula/Greyhound/releases) (Used to export models/textures from the games)
 - [C2M](https://github.com/sheilan102/C2M) (used to export map info and map geometry)
 
