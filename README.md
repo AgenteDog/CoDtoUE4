@@ -32,7 +32,7 @@ If you want to know/learn how to use the UnrealEnginePython plugin they have lot
 geo_map = "mp_hijacked"
 geo_directory = r"E:\TEMPGROUND\hijacked"
 xmodels_path = r"/Game/CoD/"
-extension = ".tga"```
+extension = ".tga" ```
 
 You will find this in the Placing script and in the importing script.
 Before explaining what everything is, make sure you only replace what is inside the quotes!!!
