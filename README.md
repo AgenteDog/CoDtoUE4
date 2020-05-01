@@ -27,7 +27,7 @@ If you want to know/learn how to use the UnrealEnginePython plugin they have lot
 
 Still: running the script is pretty much just copy/pasting and editing a few values. Just open the plugin and you will see a code editor, just make a new file and paste one of the two scripts. There you can edit the values if you want too. Then just hit run and thats it. (You will have to do this for both placing and importing, but like I said it takes literal seconds.)
 
-Tip: You should get an embedded version of the UnrealeEnginePython plugin if you are just looking to run the script.
+Tip: You should get an embedded version of the UnrealeEnginePython plugin if you are just looking to run the script. Embedded versions are versions of the plugin that come with python so that you dont need to have python installed on your computer.
 
 
 *Same thing for C2M and Greyhound.*
@@ -40,8 +40,8 @@ Tip: You should get an embedded version of the UnrealeEnginePython plugin if you
  4. Take the error folder from **ImportedFiles.zip** and paste it inside the xmodels folder.
  5. Take the $black.TGA file (also from the **ImportedFiles.zip file) and paste it inside the _images folder that is inside the xmodels folder.
  
- Tip: Do not rename any of the files.
- Tip2: If you get any missing textures while importing I would recommend you to just export all the game textures and put them in the textures folder inside the _images folder.
+Tip: Do not rename any of the files.
+Tip2: If you get any missing textures while importing I would recommend you to just export all the game textures and put them in the textures folder inside the _images folder.
  
 ### Steps to take before actually using the script (in UE4):
  
