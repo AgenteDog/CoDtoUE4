@@ -32,7 +32,8 @@ If you want to know/learn how to use the UnrealEnginePython plugin they have lot
 geo_map = "mp_hijacked"
 geo_directory = r"E:\TEMPGROUND\hijacked"
 xmodels_path = r"/Game/CoD/"
-extension = ".tga" ```
+extension = ".tga"
+```
 
 You will find this in the Placing script and in the importing script.
 Before explaining what everything is, make sure you only replace what is inside the quotes!!!
@@ -50,7 +51,8 @@ extension = Extension of the textures exported by greyhound. I recommend exporti
 There is a bug with the textures on black ops 2 where some textures had transparency even if the textures were solid. This created a lot of bugged objects. My solution to this was to make a list of things that will have transparency.
 
 ```python
-opacity = ("grass", "foliage", "glass", "paper")```
+opacity = ("grass", "foliage", "glass", "paper")
+```
 
 Basically, if the material has any of those words in its name then transparency will be applied! This means that if the file is called "example_grass_example" then transparency will be aplied. Same thing if the material is called "examplegrassexample." As long as any of those words are in the material name, transparency will be applied.
 
