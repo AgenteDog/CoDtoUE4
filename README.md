@@ -24,8 +24,9 @@ I havent tried it in older versions but feel free to try!
 If you want to know/learn how to use the UnrealEnginePython plugin they have lots of documentation! Also, running the script is pretty much just copy/pasting and editing a few values.
 *Same thing for C2M and Greyhound.*
 
+## Before using the script
 
-## Steps to take before actually using the script:
+### Steps to take before actually using the script:
 
  1. Export Greyhound and C2M necessary files. (make sure you expor textures with the _images txt file enabled)
  2. Create a main folder (you can name it whatever you want)
@@ -35,6 +36,12 @@ If you want to know/learn how to use the UnrealEnginePython plugin they have lot
  
  Tip: Do not rename any of the files.
  Tip2: If you get any missing textures while importing I would recommend you to just export all the game textures and put them in the textures folder inside the _images folder.
+ 
+ ### Steps to take before actually using the script (in UE4):
+ 
+ Just paste all files inside the UE4MasterMats folder (from **UE4MasterMats.zip**) in your content folder.
+ 
+ Those are the master materials :)
  
  ## Actually using the script:
  
