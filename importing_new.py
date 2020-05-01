@@ -15,6 +15,8 @@ geo_directory = r"E:\TEMPGROUND\hijacked"
 xmodels_path = r"/Game/CoD/"
 extension = ".tga"
 
+opacity = ("grass", "foliage", "glass", "paper") #if the material has this name then it adds opacity to it.
+
 
 geo_folder = geo_directory + "\\" + geo_map + "\\" # This is the folder where the map geometry is stored. Its basically the directory + the map name.
 geo_mtl_file = geo_directory + "\\" + geo_map + "\\" + geo_map + ".mtl" # This is the folder where the mtl of the map geometry is stored.
@@ -22,8 +24,6 @@ geo_mtl_file = geo_directory + "\\" + geo_map + "\\" + geo_map + ".mtl" # This i
 
 xmodels_directory = geo_directory + r"\xmodels" # This is the xmodels directory.
 xmodels_json = geo_directory + "\\" + geo_map + "\\" + geo_map + "_xmodels.json" #This is where the json file is stored.
-
-opacity = ("grass", "foliage", "glass", "paper") #if the material has this name then it adds opacity to it.
 
 with open(xmodels_json, "r") as file:
     entities = json.load(file)
