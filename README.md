@@ -25,7 +25,7 @@ I havent tried it in older versions but feel free to try!
 
 If you want to know/learn how to use the UnrealEnginePython plugin they have lots of documentation! 
 
-Still: running the script is pretty much just copy/pasting and editing a few values. Just open the plugin and you will see a code editor, just make a new file and paste one of the two scripts. There you can edit the values if you want too. Then just hit run and thats it. Then to place same thing: new file, paste, change values and run.
+Still: running the script is pretty much just copy/pasting and editing a few values. Just open the plugin and you will see a code editor, just make a new file and paste one of the two scripts. There you can edit the values if you want too. Then just hit run and thats it. (You will have to do this for both placing and importing, but like I said it takes literal seconds.)
 
 
 *Same thing for C2M and Greyhound.*
