@@ -47,6 +47,8 @@ If you want to know/learn how to use the UnrealEnginePython plugin they have lot
  
  I made sure that editing the script was as easy as possible! So it will not be hard at all! The previous steps explained where in fact to make things easier.
  
+*In order to modify this code, you need to open it with a text editored. Something as simple as notepad can do the job* 
+ 
  This is how the code you need to modify looks:
  
  ```python
@@ -63,7 +65,7 @@ geo_map = Name (in the files) of the map. You will be able to know the name beca
 
 geo_directory = Directory of the main folder you created! (The one that contains the xmodels and the folder by C2M)
 
-xmodels_path = This is where everything will get saved in UE4.
+xmodels_path = This is where everything will get saved in UE4. I **strongly** recommend leaving this as default.
 
 extension = Extension of the textures exported by greyhound. I recommend exporting textures in tga format.
 
