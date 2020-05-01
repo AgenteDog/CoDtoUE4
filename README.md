@@ -1,6 +1,8 @@
 # CoDtoUE4
 *Requirements/Instructions for the original version are in its respective folder*
 
+The script is now MUCH faster and better. There is a lot I could do but I stopped the project. Still, I *might* add new features and release this as a full plugin in the future.
+
 ## You will need:
 
 - [UnrealEnginePython](https://github.com/20tab/UnrealEnginePython) (Plugin that will run the script)
@@ -57,6 +59,12 @@ opacity = ("grass", "foliage", "glass", "paper")
 Basically, if the material has any of those words in its name then transparency will be applied! This means that if the file is called "example_grass_example" then transparency will be aplied. Same thing if the material is called "examplegrassexample." As long as any of those words are in the material name, transparency will be applied.
 
 If you need to add words you can just add a comma after the last word and add the word. Example: (..."paper", "example")
+
+### Placing stuff
+
+Just change the settings I mentioned (make sure they match the ones that you used for importing) and run it!
+
+Tip: Place everything on an empty world!
 
 ## Other:
 
