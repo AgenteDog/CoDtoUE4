@@ -22,7 +22,7 @@ If you want to know/learn how to use the UnrealEnginePython plugin they have lot
  Tip: Do not rename any of the files.
  Tip2: If you get any missing textures while importing I would recommend you to just export all the game textures and put them in the textures folder inside the _images folder.
  
- ##Actually using the script:
+ ## Actually using the script:
  
  I made sure that editing the script was as easy as possible! So it will not be hard at all! The previous steps explained where in fact to make things easier.
  
