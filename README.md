@@ -46,7 +46,7 @@ xmodels_path = This is where everything will get saved in UE4.
 
 extension = Extension of the textures exported by greyhound. I recommend exporting textures in tga format.
 
-###Optional settings
+### Optional settings
 
 There is a bug with the textures on black ops 2 where some textures had transparency even if the textures were solid. This created a lot of bugged objects. My solution to this was to make a list of things that will have transparency.
 
