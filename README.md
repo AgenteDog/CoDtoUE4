@@ -82,6 +82,8 @@ opacity = ("grass", "foliage", "glass", "paper")
 
 Basically, if the material has any of those words in its name then transparency will be applied! This means that if the file is called "example_grass_example" then transparency will be aplied. Same thing if the material is called "examplegrassexample." As long as any of those words are in the material name, transparency will be applied.
 
+This setting can only be found in the importing file.
+
 If you need to add words you can just add a comma after the last word and add the word. Example: (..."paper", "example")
 
 ### Placing stuff
