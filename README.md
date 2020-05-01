@@ -23,7 +23,11 @@ I havent tried it in older versions but feel free to try!
 - [Greyhound](https://github.com/Scobalula/Greyhound/releases) (Used to export models/textures from the games)
 - [C2M](https://github.com/sheilan102/C2M) (used to export map info and map geometry)
 
-If you want to know/learn how to use the UnrealEnginePython plugin they have lots of documentation! Also, running the script is pretty much just copy/pasting and editing a few values.
+If you want to know/learn how to use the UnrealEnginePython plugin they have lots of documentation! 
+
+Still: running the script is pretty much just copy/pasting and editing a few values. Just open the plugin and you will see a code editor, just make a new file and paste one of the two scripts. There you can edit the values if you want too. Then just hit run and thats it. Then to place same thing: new file, paste, change values and run.
+
+
 *Same thing for C2M and Greyhound.*
 
 ### Steps to take before actually using the script:
