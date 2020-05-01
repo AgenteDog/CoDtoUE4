@@ -3,9 +3,17 @@
 
 The script is now MUCH faster and better. There is a lot I could do but I stopped the project. Still, I *might* add new features and release this as a full plugin in the future.
 
-## What cods does this script support?
+## Support
+
+### What cods does this script support?
 
 As long as C2M can export a .json and Greyhound can export all files correctly it should be fine! If there is any cod that does not work even when this requirements are met tell me!
+
+### What UE4 versions does this support?
+
+I did this script on UE4.21, I am sure that (as long as UnrealEnginePython has a version for it) all other versions after that one will work.
+
+I havent tried it in older versions but feel free to try!
 
 ## You will need:
 
