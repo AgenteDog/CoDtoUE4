@@ -3,6 +3,10 @@
 
 The script is now MUCH faster and better. There is a lot I could do but I stopped the project. Still, I *might* add new features and release this as a full plugin in the future.
 
+## What cods does this script support?
+
+As long as C2M can export a .json and Greyhound can export all files correctly it should be fine! If there is any cod that does not work even when this requirements are met tell me!
+
 ## You will need:
 
 - [UnrealEnginePython](https://github.com/20tab/UnrealEnginePython) (Plugin that will run the script)
