@@ -139,6 +139,11 @@ error_object= "error.fbx"
 
 These 2 settings I recommend not touching. I would recommend touching them if you have some custom missing texture or error object you want to use. This setting will probably be removed and replaced with in-engine objects.
 
+If you change the missing texture. Make sure you put it in the \_images folder just like normally.
+
+
+If you change the error object. Make sure the folder has the same name as the error object. (Off course withouth the extension) Textures or materials will not be applied to the error object even if you add some to it.
+
 ### Placing stuff
 
 Just change the settings I mentioned (make sure they match the ones that you used for importing) and run it!
