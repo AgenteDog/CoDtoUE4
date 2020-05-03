@@ -1,13 +1,15 @@
 #Settings!
-geo_map = "mp_village"
-geo_directory = r"E:\Tutorial\Standoff"
+geo_map = "zm_tomb"
+geo_directory = r"E:\Tutorial\Origins"
 xmodels_path = r"/Game/CoD/"
 extension = ".tga"
 
 #Optional Settings!
-opacity = ("grass", "foliage", "glass", "paper", "tree", "ivy")
 import_geometry = True
 individual_geometry_objects = False
+
+all_opacity = True # I dont recommend having this as False unless you are in black ops 2.
+opacity = ["grass", "foliage", "glass", "paper", "tree", "ivy", "flag", "hedge", "graffiti", "snow"]
 
 #Some other stuff (I recommend not touching these)
 missing_texture = "missing.tga"
@@ -33,6 +35,8 @@ geo_mtl_file = geo_directory + "\\" + geo_map + "\\" + geo_map + ".mtl" # This i
 xmodels_directory = geo_directory + r"\xmodels" # This is the xmodels directory.
 xmodels_json = geo_directory + "\\" + geo_map + "\\" + geo_map + "_xmodels.json" #This is where the json file is stored.
 
+geo_map_original = geo_map #Save original geo map name in case of it being changed
+
 missing_texture_name = missing_texture.rsplit(".", 1)
 error_object_name = error_object.rsplit(".", 1)
 
@@ -40,6 +44,7 @@ error_object_name = error_object.rsplit(".", 1)
 #Fix text so that it is usable on ue4
 def clean(text):
     new_text = text.replace('~', '_').replace('#', '_').replace('$', '_').replace('&', '_')
+
     return new_text
 
 #Import textures
@@ -66,6 +71,23 @@ def import_texture(texture_map):
             texture_factory.factory_import_object(texture_tga, xmodels_path + 'textures')
             ue.rename_asset(xmodels_path + "textures/" + missing_texture_name[0] + "." + missing_texture_name[0], texture_clean)
 
+def select_master_material(slot_name, normal_location, opacity_location):
+
+    if not all_opacity:
+        if any(item in slot_name for item in (opacity)):
+            master_mat = ue.load_object(material_class, opacity_location)
+
+        else:
+            master_mat = ue.load_object(material_class, normal_location)
+
+    else:
+        master_mat = ue.load_object(material_class, opacity_location)
+
+    return master_mat
+
+
+#Start the script
+
 with open(xmodels_json, "r") as file:
     entities = json.load(file)
 
@@ -80,6 +102,9 @@ for model in entities:
     prop = {}
     prop_clean = {}
     prop["Name"] = str(model.get("Name"))
+
+    if prop['Name'].endswith("."):
+        prop['Name'] = prop['Name'][:prop['Name'].rfind(".")]
 
     #I want to check if a model is missing while parsing, if it is missing it does not get added to props_clean.
     if not os.path.isdir(xmodels_directory + "/" + prop["Name"]):
@@ -109,6 +134,7 @@ unknown_prop_number = 0
 for model in props:
 
     prop_name = model['Name']
+
 
     if model["Name"].endswith("_missing"):
         prop_name = model["Name"][:model['Name'].rfind("_missing")]
@@ -164,6 +190,9 @@ for texture_info in entities:
     #Parse model names in order to avoid the same model being parsed twice.
     model_name = {}
     model_name['Name'] = texture_info['Name']
+
+    if model_name['Name'].endswith("."):
+        model_name['Name'] = model_name['Name'][:model_name['Name'].rfind(".")]
 
     #Check if model exists.
     if not os.path.isdir(xmodels_directory + "/" + texture_info["Name"]):
@@ -263,16 +292,7 @@ for texture_info in entities:
 
             except:
 
-                if not albedo == 'Default':
-                    texture = ue.load_object(texture_class, xmodels_path + 'textures/' + albedo + '.' + albedo)
-
-                    if any(item in name for item in (opacity)):
-                        master_material = ue.load_object(material_class, '/Game/MasterMat_Opacity.MasterMat_Opacity')
-
-                    else:
-                        master_material = ue.load_object(material_class, '/Game/MasterMat.MasterMat')
-                else:
-                    master_material = ue.load_object(material_class, '/Game/MasterMat.MasterMat')
+                master_material = select_master_material(name, '/Game/MasterMat.MasterMat', '/Game/MasterMat_Opacity.MasterMat_Opacity' )
 
                 #Select and create material
                 material_instance = ue.create_material_instance(master_material, xmodels_path + 'materials/', name)
@@ -359,19 +379,40 @@ if import_geometry:
             geo_map = f"p_{geo_map}"
 
     #Lets import the map geometry
-    fbx_factory = PyFbxFactory()
-    assets_dir = os.path.join(os.path.expanduser(geo_folder))
-    obj = os.path.join(assets_dir, geo_map + ".obj")
+    #First check if it is alredy imported
+    not_imported = False
+    if individual_geometry_objects:
+        for model in models:
+            model = clean(model)
 
-    # configure the factory
-    fbx_factory.ImportUI.bCreatePhysicsAsset = False
-    fbx_factory.ImportUI.bImportMaterials = False
-    fbx_factory.ImportUI.bImportTextures = False
-    fbx_factory.ImportUI.bImportAnimations = False
-    fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = False
-    fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
+            try:
+                ue.load_object(mesh_class, f"{xmodels_path}MapGeo/{geo_map_original}/{geo_map_original}_{model}.{geo_map_original}_{model}")
+            except:
+                not_imported = True
 
-    mesh = fbx_factory.factory_import_object(obj, xmodels_path + "MapGeo")
+    else:
+        for model in geo_matfile['Materials']:
+            model = clean(model)
+
+            try:
+                ue.load_object(mesh_class, f"{xmodels_path}MapGeo/{geo_map_original}/{geo_map_original}_{model}.{geo_map_original}_{model}")
+            except:
+                not_imported = True
+
+    if not_imported:
+        fbx_factory = PyFbxFactory()
+        assets_dir = os.path.join(os.path.expanduser(geo_folder))
+        obj = os.path.join(assets_dir, geo_map + ".obj")
+
+        # configure the factory
+        fbx_factory.ImportUI.bCreatePhysicsAsset = False
+        fbx_factory.ImportUI.bImportMaterials = False
+        fbx_factory.ImportUI.bImportTextures = False
+        fbx_factory.ImportUI.bImportAnimations = False
+        fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = False
+        fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
+
+        mesh = fbx_factory.factory_import_object(obj, xmodels_path + "MapGeo/" +  geo_map_original)
 
     if individual_geometry_objects:
         os.remove(f"{geo_folder}{geo_map}.obj")
@@ -388,11 +429,7 @@ if import_geometry:
         slot_name = clean(slot)
 
         #Select master
-        if any(item in slot_name for item in (opacity)):
-            master_material = ue.load_object(material_class, '/Game/MasterMat_Opacity.MasterMat_Opacity')
-
-        else:
-            master_material = ue.load_object(material_class, '/Game/MasterMat.MasterMat')
+        master_material = select_master_material(slot_name, '/Game/MasterMat.MasterMat', '/Game/MasterMat_Opacity.MasterMat_Opacity' )
 
         #create instance if it does not exist
         try:
@@ -446,12 +483,12 @@ if import_geometry:
             #Assign the materials
             model_name = f"{geo_map}_{clean(slot)}"
 
-            asset = ue.load_object(mesh_class, xmodels_path + 'MapGeo/' + model_name + '.' + model_name)
+            asset = ue.load_object(mesh_class, f"{xmodels_path}MapGeo/{geo_map_original}/{model_name}.{model_name}")
 
             for index, material in enumerate(asset.StaticMaterials):
                 if clean(slot) in material.MaterialSlotName :
 
-                    component = ue.load_object(mesh_class, xmodels_path + 'MapGeo/' + model_name + '.' + model_name)
+                    component = ue.load_object(mesh_class, f"{xmodels_path}MapGeo/{geo_map_original}/{model_name}.{model_name}")
                     material = ue.load_object(material_instance_class, xmodels_path + 'materials/' + slot_name + '.' + slot_name)
                     component.set_material(index, material);
 
@@ -466,12 +503,12 @@ if import_geometry:
 
                 model_name = f"{geo_map}_{info_model}{model_number}"
 
-                asset = ue.load_object(mesh_class, xmodels_path + 'MapGeo/' + model_name + '.' + model_name)
+                asset = ue.load_object(mesh_class, f"{xmodels_path}MapGeo/{geo_map_original}/{model_name}.{model_name}")
 
                 for index, material in enumerate(asset.StaticMaterials):
                     if info_model in material.MaterialSlotName:
 
-                        component = ue.load_object(mesh_class, xmodels_path + 'MapGeo/' + model_name + '.' + model_name)
+                        component = ue.load_object(mesh_class, f"{xmodels_path}MapGeo/{geo_map_original}/{model_name}.{model_name}")
                         material = ue.load_object(material_instance_class, xmodels_path + 'materials/' + info_model + '.' + info_model)
                         component.set_material(index, material);
 
