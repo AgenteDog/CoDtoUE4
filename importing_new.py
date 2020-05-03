@@ -1,3 +1,19 @@
+#Settings!
+geo_map = "mp_village"
+geo_directory = r"E:\Tutorial\Standoff"
+xmodels_path = r"/Game/CoD/"
+extension = ".tga"
+
+#Optional Settings!
+opacity = ("grass", "foliage", "glass", "paper", "tree", "ivy")
+import_geometry = True
+individual_geometry_objects = False
+
+#Some other stuff (I recommend not touching these)
+missing_texture = "missing.tga"
+error_object= "error.fbx"
+
+#Script
 import unreal_engine as ue
 from unreal_engine.classes import Actor, Character, PyFbxFactory, TextureFactory, Material, StaticMesh
 from unreal_engine.structs import StaticMaterial, MeshUVChannelInfo
@@ -10,20 +26,45 @@ texture_class = ue.find_class("Texture2D")
 material_instance_class = ue.find_class("MaterialInstanceConstant")
 
 
-geo_map = "mp_hijacked"
-geo_directory = r"E:\TEMPGROUND\hijacked"
-xmodels_path = r"/Game/CoD/"
-extension = ".tga"
-
-opacity = ("grass", "foliage", "glass", "paper") #if the material has this name then it adds opacity to it.
-
-
 geo_folder = geo_directory + "\\" + geo_map + "\\" # This is the folder where the map geometry is stored. Its basically the directory + the map name.
 geo_mtl_file = geo_directory + "\\" + geo_map + "\\" + geo_map + ".mtl" # This is the folder where the mtl of the map geometry is stored.
 
 
 xmodels_directory = geo_directory + r"\xmodels" # This is the xmodels directory.
 xmodels_json = geo_directory + "\\" + geo_map + "\\" + geo_map + "_xmodels.json" #This is where the json file is stored.
+
+missing_texture_name = missing_texture.rsplit(".", 1)
+error_object_name = error_object.rsplit(".", 1)
+
+# Functions
+#Fix text so that it is usable on ue4
+def clean(text):
+    new_text = text.replace('~', '_').replace('#', '_').replace('$', '_').replace('&', '_')
+    return new_text
+
+#Import textures
+def import_texture(texture_map):
+
+    texture_clean = clean(texture_map)
+
+    try:
+        #Check if textures exists
+        ue.load_object(texture_class, xmodels_path + "textures/" + texture_clean + "." + texture_clean)
+
+    except:
+        #If it does not exist, import it. if the texture is also not avialable for import then import the missing texture
+        try:
+            texture_factory = TextureFactory()
+            texture_factory.OverwriteYesOrNoToAllState = 2
+            texture_tga = os.path.join(xmodels_directory, '_images/' + texture_map + extension)
+            texture_factory.factory_import_object(texture_tga, xmodels_path + 'textures')
+
+        except:
+            texture_factory = TextureFactory()
+            texture_factory.OverwriteYesOrNoToAllState = 2
+            texture_tga = os.path.join(xmodels_directory, '_images/' + missing_texture)
+            texture_factory.factory_import_object(texture_tga, xmodels_path + 'textures')
+            ue.rename_asset(xmodels_path + "textures/" + missing_texture_name[0] + "." + missing_texture_name[0], texture_clean)
 
 with open(xmodels_json, "r") as file:
     entities = json.load(file)
@@ -63,41 +104,49 @@ LOD0 = ""
 if os.path.isfile(xmodels_directory + "/" + str(prop_clean["Name"]) + "/" + str(prop_clean["Name"]) + "_LOD0.obj"):
     LOD0 = "_LOD0"
 
+unknown_prop_number = 0
 #Start importing
 for model in props:
-    try:
-        ue.load_object(mesh_class, xmodels_path + "xmodels/" + model["Name"] + "." + model["Name"])
 
-    except:
-        fbx_factory = PyFbxFactory()
+    prop_name = model['Name']
 
-        # build the path for the fbx file
-        if model["Name"].endswith("_missing"):
-            assets_dir = os.path.join(os.path.expanduser(xmodels_directory), "error")
-            obj = os.path.join(assets_dir, "error" + ".fbx")
+    if model["Name"].endswith("_missing"):
+        prop_name = model["Name"][:model['Name'].rfind("_missing")]
 
-        else:
-            assets_dir = os.path.join(os.path.expanduser(xmodels_directory), model["Name"])
-            obj = os.path.join(assets_dir, model["Name"] + LOD0 + ".obj")
+    if not prop_name == 'None':
+        try:
+            ue.load_object(mesh_class, xmodels_path + "xmodels/" + prop_name + "." + prop_name)
 
-        # configure the factory
-        fbx_factory.ImportUI.bCreatePhysicsAsset = False
-        fbx_factory.ImportUI.bImportMaterials = False
-        fbx_factory.ImportUI.bImportTextures = False
-        fbx_factory.ImportUI.bImportAnimations = False
-        fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = True
-        fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
+        except:
+            fbx_factory = PyFbxFactory()
 
-        # import the mesh
-        mesh = fbx_factory.factory_import_object(obj, xmodels_path + "xmodels")
+            # build the path for the fbx file
+            if model["Name"].endswith("_missing"):
+                assets_dir = os.path.join(os.path.expanduser(xmodels_directory), error_object_name[0])
+                obj = os.path.join(assets_dir, error_object)
 
-        if model["Name"].endswith("_missing"):
-            ue.rename_asset(xmodels_path + "xmodels/" + "error" + "." + "error",model["Name"])
+            else:
+                assets_dir = os.path.join(os.path.expanduser(xmodels_directory), model["Name"])
+                obj = os.path.join(assets_dir, model["Name"] + LOD0 + ".obj")
 
-        else:
-            ue.rename_asset(xmodels_path + "xmodels/" + model["Name"] + LOD0 + "." + model["Name"] + LOD0, model["Name"])
+            # configure the factory
+            fbx_factory.ImportUI.bCreatePhysicsAsset = False
+            fbx_factory.ImportUI.bImportMaterials = False
+            fbx_factory.ImportUI.bImportTextures = False
+            fbx_factory.ImportUI.bImportAnimations = False
+            fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = True
+            fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
 
-        props.append(prop)
+            # import the mesh
+            mesh = fbx_factory.factory_import_object(obj, xmodels_path + "xmodels")
+
+            if model["Name"].endswith("_missing"):
+                ue.rename_asset(xmodels_path + "xmodels/" + error_object_name[0] + "." + error_object_name[0], prop_name)
+
+            else:
+                ue.rename_asset(xmodels_path + "xmodels/" + prop_name + LOD0 + "." + prop_name + LOD0, prop_name)
+
+            props.append(prop)
 
 
 #3. Materials
@@ -135,9 +184,11 @@ for texture_info in entities:
 
             #Open the txt file
             with open(images_file, "r") as images_file_info:
+
                 diffuse_found = False
                 normal_found = False
                 specular_found = False
+
                 for texture_info in images_file_info:
 
                     #Set dicts and strip the lines
@@ -167,63 +218,21 @@ for texture_info in entities:
                 diffuse_name['Name'] = diffuse_texture
                 diffuse_names.append(diffuse_name)
 
-                try:
-                    ue.load_object(texture_class, xmodels_path + "textures/" + diffuse_texture + "." + diffuse_texture)
-                except:
-                    try:
-                        texture_factory = TextureFactory()
-                        texture_factory.OverwriteYesOrNoToAllState = 2
-                        texture_tga = os.path.join(xmodels_directory, '_images/' + diffuse_texture + extension)
-                        texture_factory.factory_import_object(texture_tga, xmodels_path + 'textures')
-
-                    except:
-                        texture_factory = TextureFactory()
-                        texture_factory.OverwriteYesOrNoToAllState = 2
-                        texture_tga = os.path.join(xmodels_directory, '_images/' + "missing.tga")
-                        texture_factory.factory_import_object(texture_tga, xmodels_path + 'textures')
-                        ue.rename_asset(xmodels_path + "textures/" + "missing" + "." + "missing", diffuse_texture)
+                import_texture(diffuse_texture)
 
 
             if normal_found:
                 normal_name['Name'] = normal_texture
                 normal_names.append(normal_name)
 
-                try:
-                    ue.load_object(texture_class, xmodels_path + "textures/" + normal_texture + "." + normal_texture)
-                except:
-                    try:
-                        texture_factory = TextureFactory()
-                        texture_factory.OverwriteYesOrNoToAllState = 2
-                        texture_tga = os.path.join(xmodels_directory, '_images/' + normal_texture + extension)
-                        texture_factory.factory_import_object(texture_tga, xmodels_path + 'textures')
-
-                    except:
-                        texture_factory = TextureFactory()
-                        texture_factory.OverwriteYesOrNoToAllState = 2
-                        texture_tga = os.path.join(xmodels_directory, '_images/' + "missing.tga")
-                        texture_factory.factory_import_object(texture_tga, xmodels_path + 'textures')
-                        ue.rename_asset(xmodels_path + "textures/" + "missing" + "." + "missing", normal_texture)
+                import_texture(normal_texture)
 
 
             if specular_found:
                 specular_name['Name'] = specular_texture
                 specular_names.append(specular_name)
 
-                try:
-                    ue.load_object(texture_class, xmodels_path + "textures/" + specular_texture + "." + specular_texture)
-                except:
-                    try:
-                        texture_factory = TextureFactory()
-                        texture_factory.OverwriteYesOrNoToAllState = 2
-                        texture_tga = os.path.join(xmodels_directory, '_images/' + specular_texture + extension)
-                        texture_factory.factory_import_object(texture_tga, xmodels_path + 'textures')
-
-                    except:
-                        texture_factory = TextureFactory()
-                        texture_factory.OverwriteYesOrNoToAllState = 2
-                        texture_tga = os.path.join(xmodels_directory, '_images/' + "missing.tga")
-                        texture_factory.factory_import_object(texture_tga, xmodels_path + 'textures')
-                        ue.rename_asset(xmodels_path + "textures/" + "missing" + "." + "missing", specular_texture)
+                import_texture(specular_texture)
 
 
             #If the line is not found in the file:
@@ -243,26 +252,17 @@ for texture_info in entities:
         for slot_name, albedo, normal, specular in zip(slot_names, diffuse_names, normal_names, specular_names):
 
             #Replace all "illegal characters" with a "_"
-            name = slot_name['Name'].replace('~', '_')
-            name = name[name.rfind('-') + 1:]
-            name = name.replace('#', '_')
-            name = name.replace('$', '_')
-            name = name.replace('&', '_')
-            albedo = albedo['Name'].replace('~', '_')
-            albedo = albedo.replace('#', '_')
-            albedo = albedo.replace('$', '_')
-            albedo = albedo.replace('&', '_')
-            normal = normal['Name']
-            specular = specular_name['Name'].replace('~', '_')
-            specular = specular.replace('#', '_')
-            specular = specular.replace('$', '_')
-            specular = specular.replace('&', '_')
+            name = clean(slot_name['Name'])
+            albedo = clean(albedo['Name'])
+            normal = clean(normal['Name'])
+            specular = clean(specular_name['Name'])
 
             #Check if the albedo texture exists, if it does then decide if it has alpha channel or not
             try:
                  ue.load_object(material_instance_class, xmodels_path + 'materials/' + name + '.' + name)
 
             except:
+
                 if not albedo == 'Default':
                     texture = ue.load_object(texture_class, xmodels_path + 'textures/' + albedo + '.' + albedo)
 
@@ -273,7 +273,8 @@ for texture_info in entities:
                         master_material = ue.load_object(material_class, '/Game/MasterMat.MasterMat')
                 else:
                     master_material = ue.load_object(material_class, '/Game/MasterMat.MasterMat')
-                #Select and create master material
+
+                #Select and create material
                 material_instance = ue.create_material_instance(master_material, xmodels_path + 'materials/', name)
 
                 #Assign the albedo texture to the instance if the texture exists
@@ -311,88 +312,167 @@ for texture_info in entities:
 
 
 #4. Map Geometry
-#First parsing all the slots, textures, etc.
 
-geo_slots = []
-geo_albedos = []
+if import_geometry:
 
-with open(geo_mtl_file, 'r') as file:
+    with open(f"{geo_folder}{geo_map}_matdata.json", "r") as file:
+        geo_matfile = json.load(file)
 
-    for line in file.readlines():
-        geo_slot = {}
-        geo_albedo = {}
+    #If the perfect geometry physics setting is on
+    if individual_geometry_objects:
+        models = []
 
-        _line = line.strip()
+        with open(f"{geo_folder}{geo_map}.obj", 'r') as geo:
+            new_geometry = open(f"{geo_folder}p_{geo_map}.obj", "a")
 
-        if _line.startswith("newmtl"):
-            geo_slot_name = _line[_line.rfind(" ") + 1:]
+            for _line in geo.readlines():
 
-            geo_slot_name = geo_slot_name.replace('~', '_')
-            geo_slot_name = geo_slot_name.replace('#', '_')
-            geo_slot_name = geo_slot_name.replace('$', '_')
-            geo_slot_name = geo_slot_name.replace('&', '_')
+                line = _line.strip()
 
-            geo_slot['Name'] = geo_slot_name
-            geo_slots.append(geo_slot)
+                if line.startswith("g "):
 
-        elif _line.startswith("map_Kd"):
-            geo_albedo_name = _line[_line.rfind(r"\\") + 2:]
-            geo_albedo_name = geo_albedo_name[:geo_albedo_name.rfind(".png")]
+                    model_name = line[line.rfind(" ") + 1:]
 
-            texture_factory = TextureFactory()
-            texture_factory.OverwriteYesOrNoToAllState = 2
-            texture_tga = os.path.join(xmodels_directory, '_images/' + geo_albedo_name + extension)
-            texture_factory.factory_import_object(texture_tga, xmodels_path + 'textures')
+                    model_info = {}
+                    model_info['Number'] = 1
+                    model_info['Model'] = model_name
 
-            geo_albedo_name = geo_albedo_name.replace('~', '_')
-            geo_albedo_name = geo_albedo_name.replace('#', '_')
-            geo_albedo_name = geo_albedo_name.replace('$', '_')
-            geo_albedo_name = geo_albedo_name.replace('&', '_')
+                    for model in models:
+                        if model_name == model['Model']:
+                            model_info['Number'] = model['Number']
+                            number_temp = model['Number'] + 1
 
-            geo_albedo['Name'] = geo_albedo_name
-            geo_albedos.append(geo_albedo)
+                    if model_info not in models:
+                        models.append(model_info)
 
+                    elif model_info in models:
+                        models.remove(model_info)
+                        model_info['Number'] = number_temp
+                        models.append(model_info)
 
-#Now lets import the map geometry
-try:
-    ue.load_object(mesh_class, xmodels_path + "MapGeo/" + "mp_drone" + "." + "mp_drone")
+                    new_geometry.write(f"g {model_info['Model']}{model_info['Number']}\n")
 
-except:
+                else:
+                    new_geometry.write(line + "\n")
+
+            new_geometry.close()
+            geo_map = f"p_{geo_map}"
+
+    #Lets import the map geometry
     fbx_factory = PyFbxFactory()
-    assets_dir = os.path.join(os.path.expanduser(geo_directory))
-    obj = os.path.join(assets_dir, "mp_drone" + ".obj")
+    assets_dir = os.path.join(os.path.expanduser(geo_folder))
+    obj = os.path.join(assets_dir, geo_map + ".obj")
 
     # configure the factory
     fbx_factory.ImportUI.bCreatePhysicsAsset = False
     fbx_factory.ImportUI.bImportMaterials = False
     fbx_factory.ImportUI.bImportTextures = False
     fbx_factory.ImportUI.bImportAnimations = False
-    fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = True
+    fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = False
     fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
 
-    # import the mesh
     mesh = fbx_factory.factory_import_object(obj, xmodels_path + "MapGeo")
 
+    if individual_geometry_objects:
+        os.remove(f"{geo_folder}{geo_map}.obj")
 
-#Im not sure if this works!!! That is why it is comented
-'''
-#Now its time to create all the materials
-for slot, albedo in zip(geo_slots, geo_albedos):
-    #Select master and create instance
-    master_material = ue.load_object(material_class, '/Game/MasterMat.MasterMat')
-    material_instance = ue.create_material_instance(master_material, xmodels_path + 'materials/', slot['Name'])
+    #Import textures
+    for textures in geo_matfile['Materials'].values():
+        for texture in textures.values():
+            import_texture(texture)
 
-    #Assign albedo texture
-    material_instance.get_material_scalar_parameter('AlbedoTexture')
-    current_texture = ue.load_object(texture_class, '/Game/CoD/textures/' + albedo['Name'] + '.' + albedo['Name'] )
-    material_instance.set_material_texture_parameter('AlbedoTexture', current_texture)
+    #Now its time to create all the materials
+    for slot, texture in geo_matfile['Materials'].items():
 
-    #Assign the materials
-    asset = ue.load_object(mesh_class, xmodels_path + 'MapGeo/' + "mp_drone" + '.' + "mp_drone")
+        #Replace all "illegal characters" with a "_"
+        slot_name = clean(slot)
 
-    for index, material in enumerate(asset.StaticMaterials):
-        if material.MaterialSlotName == slot['Name'] + "Mat":
-            component = ue.load_object(mesh_class, xmodels_path + 'MapGeo/' + "mp_drone" + '.' + "mp_drone")
-            material = ue.load_object(material_instance_class, xmodels_path + 'materials/' + slot['Name'] + '.' + slot['Name'])
-            component.set_material(index, material);
-'''
+        #Select master
+        if any(item in slot_name for item in (opacity)):
+            master_material = ue.load_object(material_class, '/Game/MasterMat_Opacity.MasterMat_Opacity')
+
+        else:
+            master_material = ue.load_object(material_class, '/Game/MasterMat.MasterMat')
+
+        #create instance if it does not exist
+        try:
+            ue.load_object(material_instance_class, xmodels_path + 'materials/' + f"{slot_name}.{slot_name}")
+        except:
+
+                material_instance = ue.create_material_instance(master_material, xmodels_path + 'materials/', slot_name)
+
+                #Assign albedo texture
+                try:
+
+                    albedo = clean(texture['Color Map'])
+
+                    material_instance.get_material_scalar_parameter('AlbedoTexture')
+                    current_texture = ue.load_object(texture_class, '/Game/CoD/textures/' + albedo + '.' + albedo )
+                    material_instance.set_material_texture_parameter('AlbedoTexture', current_texture)
+
+                except:
+                    pass
+                    #Dont worry if it gets here, it just means that the material has no Albedo
+
+                #Assign normal texture
+                try:
+
+                    normal = clean(texture['Normal Map'])
+
+                    if not normal == '$identitynormalmap':
+                        material_instance.get_material_scalar_parameter('NormalTexture')
+                        current_texture = ue.load_object(texture_class, '/Game/CoD/textures/' + normal + '.' + normal)
+                        material_instance.set_material_texture_parameter('NormalTexture', current_texture)
+
+                except:
+                    pass
+                    #Dont worry if it gets here, it just means that the material has no Normal
+
+                #Assign Specular Texture
+                try:
+
+                    specular = clean(specular['Specular Map'])
+
+                    material_instance.get_material_scalar_parameter('SpecularTexture')
+                    current_texture = ue.load_object(texture_class, '/Game/CoD/textures/' + specular + '.' + specular)
+                    material_instance.set_material_texture_parameter('SpecularTexture', current_texture)
+
+                except:
+                    pass
+                    #Dont worry if it gets here, it just means that the material has no Specular
+
+        if not individual_geometry_objects:
+
+            #Assign the materials
+            model_name = f"{geo_map}_{clean(slot)}"
+
+            asset = ue.load_object(mesh_class, xmodels_path + 'MapGeo/' + model_name + '.' + model_name)
+
+            for index, material in enumerate(asset.StaticMaterials):
+                if clean(slot) in material.MaterialSlotName :
+
+                    component = ue.load_object(mesh_class, xmodels_path + 'MapGeo/' + model_name + '.' + model_name)
+                    material = ue.load_object(material_instance_class, xmodels_path + 'materials/' + slot_name + '.' + slot_name)
+                    component.set_material(index, material);
+
+
+    if individual_geometry_objects:
+        for material_info in models:
+            for model_number in range(1, material_info['Number'] + 1):
+
+                #Assign the materials
+
+                info_model = clean(material_info['Model'])
+
+                model_name = f"{geo_map}_{info_model}{model_number}"
+
+                asset = ue.load_object(mesh_class, xmodels_path + 'MapGeo/' + model_name + '.' + model_name)
+
+                for index, material in enumerate(asset.StaticMaterials):
+                    if info_model in material.MaterialSlotName:
+
+                        component = ue.load_object(mesh_class, xmodels_path + 'MapGeo/' + model_name + '.' + model_name)
+                        material = ue.load_object(material_instance_class, xmodels_path + 'materials/' + info_model + '.' + info_model)
+                        component.set_material(index, material);
+
+print("Done!!")
