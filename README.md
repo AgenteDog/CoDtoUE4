@@ -58,7 +58,7 @@ Tip2: If you get any missing textures while importing I would recommend you to j
 
 ### Steps to take before actually using the script (in UE4):
 
-Make sure you have the Unreal UnrealEnginePython plugin is installed correctly, then just paste all files inside the UE4MasterMats folder (from **UE4MasterMats.zip**) in your content folder.
+Make sure you have the Unreal UnrealEnginePython plugin is installed correctly, then just paste all files inside the UE4MasterMats folde in your content folder.
 
 Those are the master materials :)
 
