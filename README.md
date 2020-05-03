@@ -92,7 +92,13 @@ extension = Extension of the textures exported by greyhound. I recommend exporti
 
 #### Opacity
 
-There is a bug with the textures on black ops 2 where some textures had transparency even if the textures were solid. This created a lot of bugged objects. My solution to this was to make a list of things that will have transparency.
+```python
+all_opacity = False # I dont recommend having this as False unless you are in black ops 2.
+```
+
+ Decides if you want all assets to use the opacity material or not. I recommend leaving this on unless you are in black ops 2.
+
+There is a bug with the textures on black ops 2 where some textures had transparency even if the textures were solid. This created a lot of bugged objects. My solution to this was to make a list of things that will have transparency. This option will only take effects if all_opacity is set to false.
 
 ```python
 opacity = ("grass", "foliage", "glass", "paper", "tree", "ivy")
