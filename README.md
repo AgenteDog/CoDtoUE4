@@ -147,6 +147,8 @@ Tip: Place everything on an empty world!
 
 ## Other:
 
-This is old code so sorry if it is messy or if there is a lot of stuff that I could have done better. I know this code could be improved much more. I am slowly re-coding from scratch all the parts that I update. (Instead of adding features to existing parts of the code)
+This is old code so sorry if it is messy or if there is a lot of stuff that I could have done better. I know this code could be improved much more. 
+
+I am slowly re-coding from scratch all the parts that I update. (Instead of adding features to existing parts of the code)
 
 **Also: TELL ME IF THERE ARE ANY BUGS!**
