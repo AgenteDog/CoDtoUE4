@@ -34,7 +34,12 @@ last_mesh = ''
 
 
 for actor in entities:
+
     if 'Name' in actor:
+
+        if actor['Name'].endswith("."):
+            actor['Name'] = actor['Name'][:actor['Name'].rfind(".")]
+
         #Set all the coordinates, scale and rotations.
         if 'RotX' in actor:
             RotX = (float(actor['RotX'])) * math.pi/180
@@ -96,7 +101,7 @@ if import_geometry:
 
             info_model = clean(f"{geo_map}_{slot}")
 
-            mesh = ue.load_object(StaticMesh, xmodels_path + 'MapGeo' + '/' + info_model + '.' + info_model)
+            mesh = ue.load_object(StaticMesh, f"{xmodels_path}MapGeo/{geo_map}/{info_model}.{info_model}")
             obj = ue.get_editor_world().actor_spawn(StaticMeshActor)
             obj.attach_to_actor(geo_cube)
             obj.set_actor_scale( 0.394, 0.394, 0.394 );
@@ -142,9 +147,11 @@ if import_geometry:
 
                     info_model = clean(f"{geo_map}_{material_info['Model']}{model_number}")
 
-                    mesh = ue.load_object(StaticMesh, xmodels_path + 'MapGeo' + '/' + info_model + '.' + info_model)
+                    mesh = ue.load_object(StaticMesh, f"{xmodels_path}MapGeo/{geo_map}/{info_model}.{info_model}")
                     obj = ue.get_editor_world().actor_spawn(StaticMeshActor)
                     obj.attach_to_actor(geo_cube)
                     obj.set_actor_scale( 0.394, 0.394, 0.394 );
                     obj.StaticMeshComponent.StaticMesh = mesh
                     obj.set_actor_label(clean(f"{material_info['Model']}{model_number}"))
+
+print("Done!!")
