@@ -62,7 +62,7 @@ You will see a new icon in the tool that has as a logo the words "CTU". Just cli
 
 You will see this:
 
-!(https://imgur.com/a/3uOlewx)
+![](https://imgur.com/a/3uOlewx)
 
 This is what all the settings do:
 
