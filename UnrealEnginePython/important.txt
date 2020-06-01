@@ -1,0 +1,1 @@
+Thanks to Quixel! I literally could not have done it if they didnt have done their plugin using the UnrealEnginePython plugin. I added my code (UI.py, necessary.py, save.json, functions.py and Assets Folder), some libraries and deleted what I didnt need! Everything else was done by them!
