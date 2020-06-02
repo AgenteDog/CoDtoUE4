@@ -51,7 +51,10 @@ def files_list(path):
 
 #Fix text so that it is usable on ue4
 def clean(text):
-    new_text = text.replace('~', '_').replace('#', '_').replace('$', '_').replace('&', '_').replace('.', '').replace('\\', '').replace("ml/", '')
+    new_text = text.replace('~', '_').replace('#', '_').replace('$', '_').replace('&', '_').replace('.', '').replace('\\', '')
+
+    if new_text.startswith("ml"):
+        new_text = new_text.replace("ml", '')
 
     return new_text
 
