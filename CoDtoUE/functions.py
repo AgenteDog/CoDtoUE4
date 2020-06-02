@@ -49,6 +49,8 @@ class props:
                         ue.rename_asset(f"{import_folder}xmodels/{clean(prop_original_name)}.{clean(prop_original_name)}", model_clean)
                         mesh.save_package()
 
+                        break
+
                 if not model_found:
                     ue.duplicate_asset(f"{assets_folder}error.error", f"{import_folder}xmodels/{model_clean}", model_clean)
 
