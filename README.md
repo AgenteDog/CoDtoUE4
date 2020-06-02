@@ -89,3 +89,5 @@ This is what all the buttons do:
 ## Common issues that people have:
 
 - When I press the Import (or place) button, nothing happens: This issue is not actually an issue, this happens when the plugin cant find one or multiple necessary files.
+
+- Some textures are "white": These are not white textures, they are actually decals. You can replace this decals with the original texture. It is very likely that the material to replace this decal is alredy created.
