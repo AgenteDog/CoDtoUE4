@@ -5,7 +5,7 @@ from functions import *
 json_location = f"{current_path}\\save.json"
 
 if not os.path.isfile(json_location):
-    print("Seems like the json file does not exist!")
+    print("Does not exist.")
     print(json_location)
     sys.exit(0)
 
@@ -45,8 +45,10 @@ get_data()
 def PlaceAssetsFolder():
 
     #Check if directory alredy exists, if not make it.
-    if not os.path.isdir(assets_folder_dir):
+    try:
         os.makedirs(assets_folder_dir)
+    except:
+        pass
 
 
     #Place the stuff
@@ -58,6 +60,8 @@ def PlaceAssetsFolder():
     for file in glob.glob(os.path.join(SRC_DIR, GLOB_PARMS)):
         if file not in glob.glob(os.path.join(TARG_DIR, GLOB_PARMS)):
             shutil.copy(file,TARG_DIR)
+
+props._import(map_name, map_folder, import_folder, greyhound_folder, assets_folder, global_opacity, opacity_items)
 
 #Here starts the UI
 class Ui_MainWindow(QWidget):
