@@ -32,24 +32,24 @@ class props:
                         model_found = True
                         model_full_directory = file['Full Directory']
                         prop_original_name = file['Original Name']
-                        break
+                        prop_name = clean(file['Name'])
 
-                if model_found:
-                    fbx_factory = PyFbxFactory()
-                    obj = model_full_directory
+                        fbx_factory = PyFbxFactory()
+                        obj = model_full_directory
 
-                    # configure the factory
-                    fbx_factory.ImportUI.bCreatePhysicsAsset = False
-                    fbx_factory.ImportUI.bImportMaterials = False
-                    fbx_factory.ImportUI.bImportTextures = False
-                    fbx_factory.ImportUI.bImportAnimations = False
-                    fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = True
-                    fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
+                        # configure the factory
+                        fbx_factory.ImportUI.bCreatePhysicsAsset = False
+                        fbx_factory.ImportUI.bImportMaterials = False
+                        fbx_factory.ImportUI.bImportTextures = False
+                        fbx_factory.ImportUI.bImportAnimations = False
+                        fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = True
+                        fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
 
-                    mesh = fbx_factory.factory_import_object(obj, f"{import_folder}xmodels")
-                    ue.rename_asset(f"{import_folder}xmodels/{prop_original_name}.{prop_original_name}", model_clean)
+                        mesh = fbx_factory.factory_import_object(obj, f"{import_folder}xmodels")
+                        ue.rename_asset(f"{import_folder}xmodels/{clean(prop_original_name)}.{clean(prop_original_name)}", model_clean)
+                        mesh.save_package()
 
-                else:
+                if not model_found:
                     ue.duplicate_asset(f"{assets_folder}error.error", f"{import_folder}xmodels/{model_clean}", model_clean)
 
 
@@ -149,6 +149,8 @@ class props:
                         material_instance.set_material_static_switch_parameter('Specular', True)
                         material_instance.set_material_texture_parameter('SpecularTexture', current_texture)
 
+                    material_instance.save_package()
+
 
                 #Actually start assigning the material to the model
                 asset = ue.load_object(mesh_class, f"{import_folder}xmodels/{model_clean}.{model_clean}")
@@ -230,7 +232,7 @@ class props:
                 PosY = float(actor['PosY'])
                 PosZ = float(actor['PosZ'])
 
-                Scale = float(actor['Scale']) * 0.394
+                Scale = float(actor['Scale']) * 0.3937
 
 
                 #Classify the actor and it's number (this is 2 stop an actor placed twice from having the same)
@@ -322,6 +324,8 @@ class geometry:
                     current_texture = ue.load_object(texture_class, f"{import_folder}textures/{texture_name}.{texture_name}" )
                     material_instance.set_material_static_switch_parameter('Specular', True)
                     material_instance.set_material_texture_parameter('SpecularTexture', current_texture)
+
+                material_instance.save_package()
 
 
     #Re-assign parent of instances, useful if someone goes from global_opacity to not having global_opacity (and the opossite)
@@ -551,7 +555,7 @@ class geometry:
 
                         geometry_settings = ue.get_editor_world().actor_spawn(StaticMeshActor)
                         geometry_settings.attach_to_actor(geometry_cube)
-                        geometry_settings.set_actor_scale( 0.394, 0.394, 0.394 );
+                        geometry_settings.set_actor_scale( 0.3937, 0.3937, 0.3937 );
                         geometry_settings.StaticMeshComponent.StaticMesh = asset
                         geometry_settings.set_actor_label(clean(f"{geometry_info['Model']}{model_number}"))
 
@@ -585,6 +589,6 @@ class geometry:
 
                     geometry_settings = ue.get_editor_world().actor_spawn(StaticMeshActor)
                     geometry_settings.attach_to_actor(geometry_cube)
-                    geometry_settings.set_actor_scale( 0.394, 0.394, 0.394 );
+                    geometry_settings.set_actor_scale( 0.3937, 0.3937, 0.3937 );
                     geometry_settings.StaticMeshComponent.StaticMesh = asset
                     geometry_settings.set_actor_label(full_asset_name)

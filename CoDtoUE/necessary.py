@@ -96,6 +96,7 @@ def import_texture(texture_name, import_folder, greyhound_folder, assets_folder)
             texture_factory = TextureFactory()
             texture_factory.OverwriteYesOrNoToAllState = 2
             texture_factory.factory_import_object(texture_directory, f"{import_folder}textures")
+            texture_factory.save_package()
 
         else:
             ue.duplicate_asset(f"{assets_folder}missing.missing", f"{import_folder}textures/{texture_clean}", texture_clean)
