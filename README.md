@@ -10,6 +10,7 @@ Currently, these are the Unreal Engine versions my plugin supports:
 - 4.20
 - 4.21
 - 4.22
+- 4.24
 
 New versions will be supported soon.
 
