@@ -12,7 +12,7 @@ Currently, these are the Unreal Engine versions my plugin supports:
 - 4.22
 - 4.24
 
-New versions will be supported soon.
+More versions will be supported soon.
 
 
 ### What does this plugin import?
@@ -50,16 +50,16 @@ Tip2: I recommend exporting all game textures in order to make sure that there w
 
 #### How to install my plugin:
 
-1. Create a new UE4 project (optional, you can use an existing one)
-2. Go to your project folder
-3. Create a new folder called "Plugins"
-4. Unzip the downloaded .rar file in that folder
-5. You can now open your project
+1. Create a new UE4 project. (optional, you can use an existing one.)
+2. Go to your project folder.
+3. Create a new folder called "Plugins".
+4. Unzip the downloaded .rar file in that folder.
+5. You can now open your project.
 
 
 ## Using the plugin:
 
-You will see a new icon in the tool that has as a logo the words "CTU". Just click that button.
+You will see a new icon in the toolbar that has as a logo with the words "CTU". Just click that button.
 
 You will see this:
 
@@ -91,3 +91,5 @@ This is what all the buttons do:
 - When I press the Import (or place) button, nothing happens: This issue is not actually an issue, this happens when the plugin cant find one or multiple necessary files.
 
 - Some textures are "white": These are not white textures, they are actually decals. You can replace this decals with the original texture. It is very likely that the material to replace this decal is alredy created.
+
+- Unreal Engine crashes: If that happens, please report this in the issues tab! Make sure to say when the crash happened and what you did before the crash.
