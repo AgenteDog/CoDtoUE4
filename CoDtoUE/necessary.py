@@ -51,7 +51,7 @@ def files_list(path):
 
 #Fix text so that it is usable on ue4
 def clean(text):
-    new_text = text.replace('~', '_').replace('#', '_').replace('$', '_').replace('&', '_').replace('.', '').replace('\\', '')
+    new_text = text.replace('~', '_').replace('#', '_').replace('$', '_').replace('&', '_').replace('.', '').replace('\\', '').replace("ml/", '')
 
     return new_text
 
@@ -96,7 +96,6 @@ def import_texture(texture_name, import_folder, greyhound_folder, assets_folder)
             texture_factory = TextureFactory()
             texture_factory.OverwriteYesOrNoToAllState = 2
             texture_factory.factory_import_object(texture_directory, f"{import_folder}textures")
-            texture_factory.save_package()
 
         else:
             ue.duplicate_asset(f"{assets_folder}missing.missing", f"{import_folder}textures/{texture_clean}", texture_clean)

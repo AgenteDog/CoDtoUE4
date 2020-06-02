@@ -47,9 +47,6 @@ class props:
 
                         mesh = fbx_factory.factory_import_object(obj, f"{import_folder}xmodels")
                         ue.rename_asset(f"{import_folder}xmodels/{clean(prop_original_name)}.{clean(prop_original_name)}", model_clean)
-                        mesh.save_package()
-
-                        break
 
                 if not model_found:
                     ue.duplicate_asset(f"{assets_folder}error.error", f"{import_folder}xmodels/{model_clean}", model_clean)
@@ -150,9 +147,6 @@ class props:
 
                         material_instance.set_material_static_switch_parameter('Specular', True)
                         material_instance.set_material_texture_parameter('SpecularTexture', current_texture)
-
-                    material_instance.save_package()
-
 
                 #Actually start assigning the material to the model
                 asset = ue.load_object(mesh_class, f"{import_folder}xmodels/{model_clean}.{model_clean}")
@@ -264,18 +258,18 @@ class props:
 
                     asset = ue.load_object(StaticMesh, f"{import_folder}xmodels/{name}.{name}")
 
+                    spawn_settings = ue.get_editor_world().actor_spawn(StaticMeshActor)
+                    spawn_settings.attach_to_actor(props_cube)
+                    spawn_settings.set_actor_scale(Scale, -Scale, Scale)
+                    spawn_settings.set_actor_location(PosX, PosY, PosZ)
+                    spawn_settings.set_actor_rotation(-RotX, -RotY, RotZ)
+                    spawn_settings.StaticMeshComponent.StaticMesh = asset
+
+                    spawn_settings.set_actor_label(f"{name}{current_number}")
+
                 except:
                     print(f"Seems like {name} is not imported!!")
                     continue
-
-                spawn_settings = ue.get_editor_world().actor_spawn(StaticMeshActor)
-                spawn_settings.attach_to_actor(props_cube)
-                spawn_settings.set_actor_scale(Scale, -Scale, Scale)
-                spawn_settings.set_actor_location(PosX, PosY, PosZ)
-                spawn_settings.set_actor_rotation(-RotX, -RotY, RotZ)
-                spawn_settings.StaticMeshComponent.StaticMesh = asset
-
-                spawn_settings.set_actor_label(f"{name}{current_number}")
 
         props_cube.set_actor_scale(1,-1,1)
 
@@ -326,8 +320,6 @@ class geometry:
                     current_texture = ue.load_object(texture_class, f"{import_folder}textures/{texture_name}.{texture_name}" )
                     material_instance.set_material_static_switch_parameter('Specular', True)
                     material_instance.set_material_texture_parameter('SpecularTexture', current_texture)
-
-                material_instance.save_package()
 
 
     #Re-assign parent of instances, useful if someone goes from global_opacity to not having global_opacity (and the opossite)
