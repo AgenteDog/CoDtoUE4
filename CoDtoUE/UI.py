@@ -61,8 +61,6 @@ def PlaceAssetsFolder():
         if file not in glob.glob(os.path.join(TARG_DIR, GLOB_PARMS)):
             shutil.copy(file,TARG_DIR)
 
-props._import(map_name, map_folder, import_folder, greyhound_folder, assets_folder, global_opacity, opacity_items)
-
 #Here starts the UI
 class Ui_MainWindow(QWidget):
 
