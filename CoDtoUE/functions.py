@@ -45,7 +45,6 @@ class props:
                         fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
 
                         mesh = fbx_factory.factory_import_object(obj, f"{import_folder}xmodels")
-                        mesh.save_package()
                         ue.rename_asset(f"{import_folder}xmodels/{clean(prop_original_name)}.{clean(prop_original_name)}", model_clean)
 
                 if not model_found:
@@ -147,8 +146,6 @@ class props:
 
                         material_instance.set_material_static_switch_parameter('Specular', True)
                         material_instance.set_material_texture_parameter('SpecularTexture', current_texture)
-
-                    material_instance.save_package()
 
                 #Actually start assigning the material to the model
                 asset = ue.load_object(mesh_class, f"{import_folder}xmodels/{model_clean}.{model_clean}")
@@ -323,8 +320,6 @@ class geometry:
                     current_texture = ue.load_object(texture_class, f"{import_folder}textures/{texture_name}.{texture_name}" )
                     material_instance.set_material_static_switch_parameter('Specular', True)
                     material_instance.set_material_texture_parameter('SpecularTexture', current_texture)
-
-                material_instance.save_package()
 
 
     #Re-assign parent of instances, useful if someone goes from global_opacity to not having global_opacity (and the opossite)

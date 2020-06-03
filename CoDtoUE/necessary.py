@@ -94,7 +94,6 @@ def import_texture(texture_name, import_folder, greyhound_folder, assets_folder)
                 texture_factory = TextureFactory()
                 texture_factory.OverwriteYesOrNoToAllState = 2
                 texture = texture_factory.factory_import_object(texture_directory, f"{import_folder}textures")
-                texture.save_package()
 
                 break
 
