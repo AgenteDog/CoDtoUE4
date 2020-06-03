@@ -458,7 +458,7 @@ class geometry:
                 model_name = clean(f"{individual_obj_name}_{model['Model']}{number}")
 
                 try:
-                    ue.load_object(mesh_class, f"{import_folder}MapGeo/{map_name}/{model_name}.{model_name}")
+                    ue.load_object(mesh_class, f"{import_folder}MapGeo/io_{map_name}/{model_name}.{model_name}")
 
                 except:
                     not_imported = True
