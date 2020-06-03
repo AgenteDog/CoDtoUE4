@@ -138,4 +138,4 @@ Then, just go to **File > Export > Fbx** and export it. Make sure you export it 
 
 - Some textures are "white": These are not white textures, they are actually decals. You can replace this decals with the original texture. It is very likely that the material to replace this decal is already created.
 
-- Unreal Engine crashes: Try importing with "Map Geometry" deactivated. If the crash does not happen again this is probably because Unreal Engine cant import the obj. If you try this and it still crashes, please report this in the issues tab! Make sure to say when the crash happened and what you did before the crash.
+- Unreal Engine crashes: Try importing with "Map Geometry" deactivated. If the crash does not happen again this is probably because Unreal Engine cant import the obj. [Read how to import an FBX file instead](https://github.com/AgenteDog/CoDtoUE4#importing-an-fbx-instead-of-an-obj). If you try this and it still crashes, please report this in the issues tab! Make sure to say when the crash happened and what you did before the crash.
