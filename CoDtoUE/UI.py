@@ -32,6 +32,7 @@ def get_data():
     assets_folder_dir = f"{project_path}/Content/{import_folder}/AssetsFolder"
     map_name = os.path.splitext(os.path.basename(map_obj))[0]
     map_folder = f"{os.path.dirname(map_obj)}\\"
+    map_extension = os.path.splitext(map_obj)[1]
     import_folder_shown = import_folder
     import_folder = "/Game/" + import_folder + "/"
     assets_folder = f"{import_folder}AssetsFolder/"
@@ -250,7 +251,7 @@ class Ui_MainWindow(QWidget):
     #Open a tab telling you to select an obj
     def map_obj_browser(self):
         _translate = QtCore.QCoreApplication.translate
-        path_info = QFileDialog.getOpenFileName(self, 'Open OBJ File', '', '(*.obj)')
+        path_info = QFileDialog.getOpenFileName(self, 'Open OBJ File', '', '(*.obj *.fbx)')
         map_obj = path_info[0]
         self.map_obj_text.setText(_translate("MainWindow", map_obj))
 
@@ -282,10 +283,10 @@ class Ui_MainWindow(QWidget):
                 if os.path.isfile(f"{map_folder}\\{map_name}_matdata.json") and os.path.isfile(f"{map_folder}\\{map_name}.obj"):
 
                     if individual_geometry_objects:
-                        geometry.import_individual_geometry(True, map_name, map_folder, import_folder, greyhound_folder, assets_folder, individual_geometry_objects, global_opacity, opacity_items)
+                        geometry.import_individual_geometry(True, map_name, map_folder, import_folder, greyhound_folder, assets_folder, individual_geometry_objects, global_opacity, opacity_items, map_extension)
 
                     else:
-                        geometry._import(map_name, map_folder, import_folder, greyhound_folder, assets_folder, global_opacity, opacity_items)
+                        geometry._import(map_name, map_folder, import_folder, greyhound_folder, assets_folder, global_opacity, opacity_items, map_extension)
 
                 else:
                     print(f'Seems like ""{map_folder}\\{map_name}_matdata.json" or "{map_folder}\\{map_name}.obj" does not exist! (bad directory)')
@@ -314,7 +315,7 @@ class Ui_MainWindow(QWidget):
             if place_geometry:
 
                 if os.path.isfile(f"{map_folder}\\{map_name}_matdata.json"):
-                    geometry.place(map_name, map_folder, import_folder, greyhound_folder, assets_folder, individual_geometry_objects, global_opacity, opacity_items)
+                    geometry.place(map_name, map_folder, import_folder, greyhound_folder, assets_folder, individual_geometry_objects, global_opacity, opacity_items, map_extension)
 
                 else:
                     print(f'Seems like ""{map_folder}\\{map_name}_matdata.json" does not exist! (bad directory)')

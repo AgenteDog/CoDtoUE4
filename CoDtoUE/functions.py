@@ -336,8 +336,8 @@ class geometry:
             check_material_existance(slot, import_folder, assets_folder, global_opacity, opacity_items)
 
 
-
-    def _import(map_name, map_folder, import_folder, greyhound_folder, assets_folder, global_opacity, opacity_items):
+    #import geom
+    def _import(map_name, map_folder, import_folder, greyhound_folder, assets_folder, global_opacity, opacity_items, map_extension):
 
         with open(f"{map_folder}\\{map_name}_matdata.json", "r") as file:
             mat_data = json.load(file)
@@ -355,7 +355,7 @@ class geometry:
 
         if not_imported:
             fbx_factory = PyFbxFactory()
-            obj = f"{map_folder}\\{map_name}.obj"
+            obj = f"{map_folder}\\{map_name}{map_extension}"
 
             # configure the factory
             fbx_factory.ImportUI.bCreatePhysicsAsset = False
@@ -401,10 +401,13 @@ class geometry:
                         asset.set_material(index, selected_material)
 
     #Only returns list if create_obj is set to false. Name of the function is pretty self explanatory.
-    def import_individual_geometry(create_obj, map_name, map_folder, import_folder, greyhound_folder, assets_folder, individual_geometry_objects, global_opacity, opacity_items):
+    def import_individual_geometry(create_obj, map_name, map_folder, import_folder, greyhound_folder, assets_folder, individual_geometry_objects, global_opacity, opacity_items, map_extension):
 
+        individual_obj_name = map_name if map_extension == '.fbx' else f"io_{map_name}"
 
-        individual_obj_name = f"io_{map_name}"
+        _return = not create_obj
+
+        create_obj = False if map_extension == '.fbx' else create_obj
 
         models = []
         with open(f"{map_folder}\\{map_name}.obj") as og_obj_info:
@@ -446,64 +449,64 @@ class geometry:
             if create_obj:
                 new_temporal_obj.close()
 
-            else:
+            if _return:
                 return models
 
 
         #Import geometry
         not_imported = False
 
+        #First do a check to see if it is alredy imported, if not then import.
         for model in models:
             for number in range(1, model['Number'] + 1):
                 model_name = clean(f"{individual_obj_name}_{model['Model']}{number}")
 
                 try:
-                    ue.load_object(mesh_class, f"{import_folder}MapGeo/io_{map_name}/{model_name}.{model_name}")
+                    ue.load_object(mesh_class, f"{import_folder}MapGeo/{individual_obj_name}/{model_name}.{model_name}")
 
                 except:
-                    not_imported = True
-                    break
 
-        if not_imported:
+                    #Import geometry
+                    fbx_factory = PyFbxFactory()
+                    obj = f"{map_folder}\\{individual_obj_name}{map_extension}"
 
-            #Import geometry
-            fbx_factory = PyFbxFactory()
-            obj = f"{map_folder}\\{individual_obj_name}.obj"
+                    # configure the factory
+                    fbx_factory.ImportUI.bCreatePhysicsAsset = False
+                    fbx_factory.ImportUI.bImportMaterials = False
+                    fbx_factory.ImportUI.bImportTextures = False
+                    fbx_factory.ImportUI.bImportAnimations = False
+                    fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = False
+                    fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
 
-            # configure the factory
-            fbx_factory.ImportUI.bCreatePhysicsAsset = False
-            fbx_factory.ImportUI.bImportMaterials = False
-            fbx_factory.ImportUI.bImportTextures = False
-            fbx_factory.ImportUI.bImportAnimations = False
-            fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = False
-            fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
+                    mesh = fbx_factory.factory_import_object(obj, f"{import_folder}MapGeo/{individual_obj_name}")
 
-            mesh = fbx_factory.factory_import_object(obj, f"{import_folder}MapGeo/{individual_obj_name}")
+                    if map_extension != '.fbx':
+                        os.remove(f"{map_folder}\\{individual_obj_name}.obj")
 
-            os.remove(f"{map_folder}\\{individual_obj_name}.obj")
+                    #Import materials and assign them
+                    geometry.import_materials(map_name, map_folder, import_folder, greyhound_folder, assets_folder, global_opacity, opacity_items)
 
-            #Import materials and assign them
-            geometry.import_materials(map_name, map_folder, import_folder, greyhound_folder, assets_folder, global_opacity, opacity_items)
+                for material_info in models:
+                    for model_number in range(1, material_info['Number'] + 1):
 
-        for material_info in models:
-            for model_number in range(1, material_info['Number'] + 1):
+                        model_name_only = clean(material_info['Model'])
+                        material_name = model_name_only
+                        model_name = f"{individual_obj_name}_{model_name_only}{model_number}"
 
-                model_name_only = clean(material_info['Model'])
-                material_name = model_name_only
-                model_name = f"{individual_obj_name}_{model_name_only}{model_number}"
+                        #Actually start assigning the material
+                        asset = ue.load_object(mesh_class, f"{import_folder}MapGeo/{individual_obj_name}/{model_name}.{model_name}")
+                        selected_material = ue.load_object(material_instance_class, f"{import_folder}materials/{material_name}.{material_name}")
 
-                #Actually start assigning the material
-                asset = ue.load_object(mesh_class, f"{import_folder}MapGeo/{individual_obj_name}/{model_name}.{model_name}")
-                selected_material = ue.load_object(material_instance_class, f"{import_folder}materials/{material_name}.{material_name}")
+                        for index, material in enumerate(asset.StaticMaterials):
+                            if model_name_only in material.MaterialSlotName:
+                                if material.MaterialInterface != selected_material:
+                                    asset.set_material(index, selected_material)
 
-                for index, material in enumerate(asset.StaticMaterials):
-                    if model_name_only in material.MaterialSlotName:
-                        if material.MaterialInterface != selected_material:
-                            asset.set_material(index, selected_material)
+                break
 
 
     #Place geometry (applies for both individual and not individual objects geometry)
-    def place(map_name, map_folder, import_folder, greyhound_folder, assets_folder, individual_geometry_objects, global_opacity, opacity_items):
+    def place(map_name, map_folder, import_folder, greyhound_folder, assets_folder, individual_geometry_objects, global_opacity, opacity_items, map_extension):
 
         cube_placeholder = ue.load_object(StaticMesh, '/Engine/BasicShapes/Cube.Cube')
 
@@ -514,12 +517,12 @@ class geometry:
         if individual_geometry_objects:
 
             #Check if everything is imported
-            models = geometry.import_individual_geometry(False, map_name, map_folder, import_folder, greyhound_folder, assets_folder, individual_geometry_objects, global_opacity, opacity_items)
+            models = geometry.import_individual_geometry(False, map_name, map_folder, import_folder, greyhound_folder, assets_folder, individual_geometry_objects, global_opacity, opacity_items, map_extension)
 
             #Import geometry
             not_imported = False
 
-            io_map_name = f"io_{map_name}"
+            io_map_name = map_name if map_extension == '.fbx' else f"io_{map_name}"
 
             for model in models:
                 for number in range(1, model['Number'] + 1):
@@ -530,15 +533,13 @@ class geometry:
 
                     except:
                         not_imported = True
+                        print("Seems like the geometry is not imported! (or not imported correctly)")
                         break
 
-            if not_imported:
-                print("Seems like the geometry is not imported! (or not imported correctly)")
-
             #If it is imported then place it
-            else:
+            if not not_imported:
 
-                individual_geometry_models = geometry.import_individual_geometry(False, map_name, map_folder, import_folder, greyhound_folder, assets_folder, individual_geometry_objects, global_opacity, opacity_items)
+                individual_geometry_models = geometry.import_individual_geometry(False, map_name, map_folder, import_folder, greyhound_folder, assets_folder, individual_geometry_objects, global_opacity, opacity_items, map_extension)
 
                 for geometry_info in individual_geometry_models:
                     for model_number in range(1, geometry_info['Number'] + 1):
@@ -552,6 +553,9 @@ class geometry:
                         geometry_settings.set_actor_scale( 0.3937, 0.3937, 0.3937 );
                         geometry_settings.StaticMeshComponent.StaticMesh = asset
                         geometry_settings.set_actor_label(clean(f"{geometry_info['Model']}{model_number}"))
+
+                if map_extension == '.fbx':
+                    geometry_cube.set_actor_scale(.01, .01, .01)
 
         else:
 
@@ -586,3 +590,6 @@ class geometry:
                     geometry_settings.set_actor_scale( 0.3937, 0.3937, 0.3937 );
                     geometry_settings.StaticMeshComponent.StaticMesh = asset
                     geometry_settings.set_actor_label(full_asset_name)
+
+            if map_extension == '.fbx':
+                geometry_cube.set_actor_scale(.01, .01, .01)
