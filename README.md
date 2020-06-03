@@ -122,7 +122,7 @@ If you check the obj directory, you will see a new obj file. The file will be ca
 For this example I will be using Blender, but, you can use any other 3D software since doing this conversion is very easy.
 
 Go to **File > Import > Obj** and put these settings:
-!()[https://i.imgur.com/1eJhh8g.png]
+![](https://i.imgur.com/1eJhh8g.png)
 
 Then, just go to **File > Export > Fbx** and export it. Make sure you export it with the same name of the obj file and it is saved in the same directory.
 
