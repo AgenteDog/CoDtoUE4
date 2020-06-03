@@ -12,7 +12,7 @@ Currently, these are the Unreal Engine versions my plugin supports:
 - 4.21
 - 4.22
 - 4.23
-- ~~4.24~~ This version has been temporally disabled (from the releases tab) due to some memory crash issues. 
+- ~~4.24~~ This version has been temporally disabled (from the releases tab) due to some memory crash issues.
 
 More versions will be supported soon.
 
@@ -92,6 +92,6 @@ This is what all the buttons do:
 
 - When I press the Import (or place) button, nothing happens: This issue is not actually an issue, this happens when the plugin cant find one or multiple necessary files.
 
-- Some textures are "white": These are not white textures, they are actually decals. You can replace this decals with the original texture. It is very likely that the material to replace this decal is alredy created.
+- Some textures are "white": These are not white textures, they are actually decals. You can replace this decals with the original texture. It is very likely that the material to replace this decal is already created.
 
-- Unreal Engine crashes: If that happens, please report this in the issues tab! Make sure to say when the crash happened and what you did before the crash.
+- Unreal Engine crashes: Try importing with "Map Geometry" deactivated. If the crash does not happen again this is probably because Unreal Engine cant import the obj. If you try this and it still crashes, please report this in the issues tab! Make sure to say when the crash happened and what you did before the crash.
