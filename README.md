@@ -87,6 +87,47 @@ This is what all the buttons do:
 - Re-Parent Materials: If you imported with Global Opacity on and your materials seem to be broken, you can de select the option and click this button. It will re-parent all your materials. This can also work in the opposite sense. If you want to use Global Opacity because while importing it was off you can just turn it on and click this button.
 - Save Settings: Saves the current settings.
 
+### Importing an FBX instead of an OBJ.
+
+#### Why should I import an FBX and not an OBJ?
+
+Sometimes Unreal Engine crashes when importing certain OBJ files. This will depend on your computer and the amount of objects on the OBJ.  If your UE4 crashes when importing with Import Geometry on, it is probably because of this. At the same time, UE4 manages FBX files much better since they are smaller overall. Because of this, you might want to convert your OBJ file to an FBX.
+
+#### How do I convert it?
+
+First of all, you need to know if you want to import with the setting Individual Geometry Objects turned on or off. If you want it on, then, there is 1 extra step that you will have to do. What is this step? I call it "Splitting the object groups." If the setting is on, then you will have to follow the step below. If not, you can skip it.
+
+##### Splitting the object groups
+
+(This step is done in UE4)
+
+In order to do the split, go to **Window > Developer Tools > Python Console**
+
+You will see that a console comes up, here you will have to do a simple command.
+
+```python
+import obj; obj.split(r"obj_directory")
+```
+
+Where it says "obj_directory" you will have to put the directory of your obj.
+
+For example:
+```python
+import obj; obj.split(r"E:\Example\exported_maps\black_ops_2\mp\mp_village\mp_village.obj")
+```
+
+If you check the obj directory, you will see a new obj file. The file will be called "mapname_new.obj". Done, now you have generated a Individual Geometry Objects obj file ready to be converted to an FBX file.
+
+##### Converting the OBJ file to an FBX
+For this example I will be using Blender, but, you can use any other 3D software since doing this conversion is very easy.
+
+Go to **File > Import > Obj** and put these settings:
+!()[https://i.imgur.com/1eJhh8g.png]
+
+Then, just go to **File > Export > Fbx** and export it. Make sure you export it with the same name of the obj file and it is saved in the same directory.
+
+**Important: If you are using a split OBJ file, name the FBX file like the original OBJ**
+
 
 ## Common issues that people have:
 
