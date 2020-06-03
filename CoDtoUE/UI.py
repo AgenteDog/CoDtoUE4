@@ -263,6 +263,7 @@ class Ui_MainWindow(QWidget):
     #This is what gets executed if you click the import button
     def import_function(self):
 
+        self.save()
         PlaceAssetsFolder(assets_folder, assets_folder_dir, current_path)
 
         #First check if the required files in your pc exist! That way no crashes happen!
@@ -297,6 +298,8 @@ class Ui_MainWindow(QWidget):
     #This is what gets executed if you click the place button
     def place_function(self):
 
+        self.save()
+
         #First check if the required files in your pc exist! That way no crashes happen!
         if not import_folder_shown == '':
             if place_props:
@@ -324,6 +327,8 @@ class Ui_MainWindow(QWidget):
 
     #This is what gets executed if you click the Re-Parent Materials button
     def re_parent_function(self):
+
+        self.save()
 
         if not import_folder_shown == '':
 

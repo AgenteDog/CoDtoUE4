@@ -156,19 +156,22 @@ def PlaceAssetsFolder(assets_folder, assets_folder_dir, current_path):
 
 
         #Import error fbx file
-        fbx_factory = PyFbxFactory()
-        obj = f"{current_path}\\AssetsFolder\\error.fbx"
+        try:
+            ue.load_object(mesh_class, f"{assets_folder}error.error")
+        except:
+            fbx_factory = PyFbxFactory()
+            obj = f"{current_path}\\AssetsFolder\\error.fbx"
 
-        #configure the factory
-        fbx_factory.ImportUI.bCreatePhysicsAsset = False
-        fbx_factory.ImportUI.bImportMaterials = False
-        fbx_factory.ImportUI.bImportTextures = False
-        fbx_factory.ImportUI.bImportAnimations = False
-        fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = True
-        fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
+            #configure the factory
+            fbx_factory.ImportUI.bCreatePhysicsAsset = False
+            fbx_factory.ImportUI.bImportMaterials = False
+            fbx_factory.ImportUI.bImportTextures = False
+            fbx_factory.ImportUI.bImportAnimations = False
+            fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = True
+            fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
 
-        mesh = fbx_factory.factory_import_object(obj, f"{assets_folder[:-1]}")
-        mesh.save_package()
+            mesh = fbx_factory.factory_import_object(obj, f"{assets_folder[:-1]}")
+            mesh.save_package()
 
 
 #Check if material exists and if it does check if the parent mat is correct.
