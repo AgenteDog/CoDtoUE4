@@ -32,7 +32,6 @@ class props:
                         model_found = True
                         model_full_directory = file['Full Directory']
                         prop_original_name = file['Original Name']
-                        prop_name = clean(file['Name'])
 
                         fbx_factory = PyFbxFactory()
                         obj = model_full_directory
@@ -46,8 +45,8 @@ class props:
                         fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
 
                         mesh = fbx_factory.factory_import_object(obj, f"{import_folder}xmodels")
-                        ue.rename_asset(f"{import_folder}xmodels/{clean(prop_original_name)}.{clean(prop_original_name)}", model_clean)
                         mesh.save_package()
+                        ue.rename_asset(f"{import_folder}xmodels/{clean(prop_original_name)}.{clean(prop_original_name)}", model_clean)
 
                 if not model_found:
                     ue.duplicate_asset(f"{assets_folder}error.error", f"{import_folder}xmodels/{model_clean}", model_clean)

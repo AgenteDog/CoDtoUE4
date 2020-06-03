@@ -63,15 +63,13 @@ def select_master_material(global_opacity, opacity_items, name, import_folder, a
 
     if not global_opacity:
         if any(item in name for item in (opacity_items)):
-            master_mat = ue.load_object(material_class, f"{assets_folder}MasterMat_Opacity.MasterMat_Opacity")
+             return ue.load_object(material_class, f"{assets_folder}MasterMat_Opacity.MasterMat_Opacity")
 
         else:
-            master_mat = ue.load_object(material_class, f"{assets_folder}MasterMat.MasterMat")
+            return ue.load_object(material_class, f"{assets_folder}MasterMat.MasterMat")
 
     else:
-        master_mat = ue.load_object(material_class, f"{assets_folder}MasterMat_Opacity.MasterMat_Opacity")
-
-    return master_mat
+        return ue.load_object(material_class, f"{assets_folder}MasterMat_Opacity.MasterMat_Opacity")
 
 
 #Import textures
@@ -92,16 +90,85 @@ def import_texture(texture_name, import_folder, greyhound_folder, assets_folder)
             if file['Name'] == texture_name and file['Type'] == "texture":
                 texture_found = True
                 texture_directory = file['Full Directory']
+
+                texture_factory = TextureFactory()
+                texture_factory.OverwriteYesOrNoToAllState = 2
+                texture = texture_factory.factory_import_object(texture_directory, f"{import_folder}textures")
+                texture.save_package()
+
                 break
 
-
-        if texture_found:
-            texture_factory = TextureFactory()
-            texture_factory.OverwriteYesOrNoToAllState = 2
-            texture_factory.factory_import_object(texture_directory, f"{import_folder}textures")
-
-        else:
+        if not texture_found:
             ue.duplicate_asset(f"{assets_folder}missing.missing", f"{import_folder}textures/{texture_clean}", texture_clean)
+
+
+#This basically takes the necessary things and places them, that way the process is not manual.
+#I know it looks like a lot of unncesary code, but, this will make everything not crash. Its necesssary since this files are the most imporant ones.
+def PlaceAssetsFolder(assets_folder, assets_folder_dir, current_path):
+
+        #Import stuff
+        #You might notice I have "assets_folder[:-1]", this is because assets_folder ends with / and UE4 does not like that for imports, so, I remove it.
+        texture_factory = TextureFactory()
+        texture_factory.OverwriteYesOrNoToAllState = 2
+
+        #import missing texture
+        try:
+            ue.load_object(texture_class, f"{assets_folder}missing.missing")
+        except:
+            texture = texture_factory.factory_import_object(f"{current_path}\\AssetsFolder\\missing.tga", f"{assets_folder[:-1]}")
+            texture.save_package()
+
+
+        #import flat normal
+        try:
+            ue.load_object(texture_class, f"{assets_folder}flat_normal.flat_normal")
+        except:
+            texture = texture_factory.factory_import_object(f"{current_path}\\AssetsFolder\\flat_normal.tga", f"{assets_folder[:-1]}")
+            texture.save_package()
+
+        #import white texture
+        try:
+            ue.load_object(texture_class, f"{assets_folder}White.White")
+        except:
+            texture = texture_factory.factory_import_object(f"{current_path}\\AssetsFolder\\White.tga", f"{assets_folder[:-1]}")
+            texture.save_package()
+
+
+        #import uassets (materials)
+        #Copy uassets and put them in UE's folder. I know its a bit too much for such a simple task but its better to prevent crashes.
+        try:
+            os.makedirs(assets_folder_dir)
+        except:
+            pass
+
+        SRC_DIR = f"{current_path}\\AssetsFolder\\uasset"
+        TARG_DIR = assets_folder_dir
+
+        GLOB_PARMS = "*"
+
+        for file in glob.glob(os.path.join(SRC_DIR, GLOB_PARMS)):
+            if file not in glob.glob(os.path.join(TARG_DIR, GLOB_PARMS)):
+
+                try:
+                    shutil.copy(file,TARG_DIR)
+                except:
+                    pass
+
+
+        #Import error fbx file
+        fbx_factory = PyFbxFactory()
+        obj = f"{current_path}\\AssetsFolder\\error.fbx"
+
+        #configure the factory
+        fbx_factory.ImportUI.bCreatePhysicsAsset = False
+        fbx_factory.ImportUI.bImportMaterials = False
+        fbx_factory.ImportUI.bImportTextures = False
+        fbx_factory.ImportUI.bImportAnimations = False
+        fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = True
+        fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
+
+        mesh = fbx_factory.factory_import_object(obj, f"{assets_folder[:-1]}")
+        mesh.save_package()
 
 
 #Check if material exists and if it does check if the parent mat is correct.

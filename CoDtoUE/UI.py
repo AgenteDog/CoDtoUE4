@@ -41,26 +41,6 @@ def get_data():
 
 get_data()
 
-#This basically takes the necessary things and places them, that way the process is not manual.
-def PlaceAssetsFolder():
-
-    #Check if directory alredy exists, if not make it.
-    try:
-        os.makedirs(assets_folder_dir)
-    except:
-        pass
-
-
-    #Place the stuff
-    SRC_DIR = f"{current_path}\\AssetsFolder"
-    TARG_DIR = assets_folder_dir
-
-    GLOB_PARMS = "*"
-
-    for file in glob.glob(os.path.join(SRC_DIR, GLOB_PARMS)):
-        if file not in glob.glob(os.path.join(TARG_DIR, GLOB_PARMS)):
-            shutil.copy(file,TARG_DIR)
-
 #Here starts the UI
 class Ui_MainWindow(QWidget):
 
@@ -283,7 +263,7 @@ class Ui_MainWindow(QWidget):
     #This is what gets executed if you click the import button
     def import_function(self):
 
-        PlaceAssetsFolder()
+        PlaceAssetsFolder(assets_folder, assets_folder_dir, current_path)
 
         #First check if the required files in your pc exist! That way no crashes happen!
         if not import_folder_shown == '':
