@@ -8,6 +8,7 @@ I am proud to say that this small project went from a script to a plugin. This p
 Currently, these are the Unreal Engine versions my plugin supports:
 - 4.17
 - 4.18
+- 4.19
 - 4.20
 - 4.21
 - 4.22
