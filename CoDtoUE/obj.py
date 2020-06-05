@@ -29,7 +29,7 @@ def split(objfile):
                     models.remove(model_info)
                     model_info['Number'] = number_temp
                     models.append(model_info)
-                    
+
                 new_temporal_obj.write(f"g {model_info['Model']}{model_info['Number']}\n")
 
             else:
@@ -37,3 +37,4 @@ def split(objfile):
 
 
     new_temporal_obj.close()
+    print("OBJ file succesfully created!")

@@ -11,7 +11,8 @@ class props:
 
         props = []
         for prop in entities:
-            if 'Name' in prop and prop['Name'] not in props:
+            if 'Name' in prop:
+                if prop['Name'] not in props:
                     props.append(prop['Name'])
 
 
@@ -42,10 +43,12 @@ class props:
                         fbx_factory.ImportUI.bImportTextures = False
                         fbx_factory.ImportUI.bImportAnimations = False
                         fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = True
-                        fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
+                        fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1
 
                         mesh = fbx_factory.factory_import_object(obj, f"{import_folder}xmodels")
                         ue.rename_asset(f"{import_folder}xmodels/{clean(prop_original_name)}.{clean(prop_original_name)}", model_clean)
+
+                        break
 
                 if not model_found:
                     ue.duplicate_asset(f"{assets_folder}error.error", f"{import_folder}xmodels/{model_clean}", model_clean)
@@ -75,7 +78,7 @@ class props:
                             #Add real values if texture is found
                             _imagesLocation = f"{textures_file['Directory']}/{textures_file['Original Name']}_images.txt"
                             if os.path.isfile(_imagesLocation):
-                                with open(_imagesLocation) as images_info:
+                                with open(_imagesLocation, 'r') as images_info:
 
                                     for _line in images_info:
 
@@ -102,62 +105,69 @@ class props:
 
                                             import_texture(texture_name, import_folder, greyhound_folder, assets_folder)
 
-                            all_material_info.append(material_info)
+                                all_material_info.append(material_info)
 
 
-            #Create and assign materials
-            for material_value in all_material_info:
+            if all_material_info:
+                #Create and assign materials
+                for material_value in all_material_info:
 
-                #Replace all "illegal characters" with a "_"
-                name = clean(material_value['Slot'])
-                slot = name
-                albedo = clean(material_value['Albedo'])
-                normal = clean(material_value['Normal'])
-                specular = clean(material_value['Specular'])
+                    #Replace all "illegal characters" with a "_"
+                    name = clean(material_value['Slot'])
+                    slot = name
+                    albedo = clean(material_value['Albedo'])
+                    normal = clean(material_value['Normal'])
+                    specular = clean(material_value['Specular'])
 
-                try:
-                    check_material_existance(name, import_folder, assets_folder, global_opacity, opacity_items, model_clean)
+                    try:
+                        check_material_existance(name, import_folder, assets_folder, global_opacity, opacity_items, model_clean)
 
-                except:
+                    except:
 
-                    #Select master and create instance
-                    master_material = select_master_material(global_opacity, opacity_items, name, import_folder, assets_folder)
-                    material_instance = ue.create_material_instance(master_material, f"{import_folder}materials/", slot)
+                        #Select master and create instance
+                        master_material = ue.load_object(material_class, f"{assets_folder}MasterMat.MasterMat")
+                        material_instance = ue.create_material_instance(master_material, f"{import_folder}materials/", slot)
 
-                    #Start assigning values
-                    if not albedo == 'Default':
+                        #Start assigning values
+                        if not albedo == 'Default':
 
-                        texture_name = albedo
+                            texture_name = albedo
 
-                        current_texture = ue.load_object(texture_class, f"{import_folder}textures/{texture_name}.{texture_name}" )
-                        material_instance.set_material_texture_parameter('AlbedoTexture', current_texture)
+                            current_texture = ue.load_object(texture_class, f"{import_folder}textures/{texture_name}.{texture_name}" )
+                            material_instance.set_material_texture_parameter('AlbedoTexture', current_texture)
 
-                    if not normal == 'Default':
+                        if not normal == 'Default':
 
-                        texture_name = normal
+                            texture_name = normal
 
-                        current_texture = ue.load_object(texture_class, f"{import_folder}textures/{texture_name}.{texture_name}" )
-                        material_instance.set_material_texture_parameter('NormalTexture', current_texture)
+                            current_texture = ue.load_object(texture_class, f"{import_folder}textures/{texture_name}.{texture_name}" )
+                            material_instance.set_material_texture_parameter('NormalTexture', current_texture)
 
-                    if not specular == 'Default':
+                        if not specular == 'Default':
 
-                        texture_name = specular
-                        current_texture = ue.load_object(texture_class, f"{import_folder}textures/{texture_name}.{texture_name}" )
+                            texture_name = specular
+                            current_texture = ue.load_object(texture_class, f"{import_folder}textures/{texture_name}.{texture_name}" )
 
-                        material_instance.set_material_static_switch_parameter('Specular', True)
-                        material_instance.set_material_texture_parameter('SpecularTexture', current_texture)
+                            material_instance.set_material_static_switch_parameter('Specular', True)
+                            material_instance.set_material_texture_parameter('SpecularTexture', current_texture)
 
-                #Actually start assigning the material to the model
-                asset = ue.load_object(mesh_class, f"{import_folder}xmodels/{model_clean}.{model_clean}")
-                selected_material = ue.load_object(material_instance_class, f"{import_folder}materials/{slot}.{slot}")
+                        if any(item in name for item in (opacity_items)) and "decal" not in name:
+                            material_instance.set_material_static_switch_parameter('Alpha', True)
 
-                for index, material in enumerate(asset.StaticMaterials):
-                    if slot in material.MaterialSlotName:
-                        if material.MaterialInterface != selected_material:
-                            asset.set_material(index, selected_material)
+                        if "decal" in name:
+                            material_instance.set_material_static_switch_parameter('Decal', True)
 
-            all_material_info.clear()
-            material_info.clear()
+                    #Actually start assigning the material to the model
+                    asset = ue.load_object(mesh_class, f"{import_folder}xmodels/{model_clean}.{model_clean}")
+                    selected_material = ue.load_object(material_instance_class, f"{import_folder}materials/{slot}.{slot}")
+
+                    for index, material in enumerate(asset.StaticMaterials):
+                        if slot in material.MaterialSlotName:
+                            if material.MaterialInterface != selected_material:
+                                asset.set_material(index, selected_material)
+
+                all_material_info.clear()
+
 
 
 
@@ -171,7 +181,8 @@ class props:
 
         props = []
         for prop in entities:
-            if 'Name' in prop and prop['Name'] not in props:
+            if 'Name' in prop:
+                if prop['Name'] not in props:
                     props.append(prop['Name'])
 
         #Get all prop material names and change the parent material if needed
@@ -296,7 +307,7 @@ class geometry:
 
             except:
 
-                master_material = select_master_material(global_opacity, opacity_items, slot_name, import_folder, assets_folder)
+                master_material = ue.load_object(material_class, f"{assets_folder}MasterMat.MasterMat")
                 material_instance = ue.create_material_instance(master_material, f"{import_folder}materials/", slot_name)
 
                 if 'Color Map' in texture:
@@ -316,10 +327,15 @@ class geometry:
                 if 'Specular Map' in texture:
                     texture_name = clean(texture['Specular Map'])
 
-
                     current_texture = ue.load_object(texture_class, f"{import_folder}textures/{texture_name}.{texture_name}" )
                     material_instance.set_material_static_switch_parameter('Specular', True)
                     material_instance.set_material_texture_parameter('SpecularTexture', current_texture)
+
+                if any(item in slot_name for item in (opacity_items)) and "decal" not in slot_name:
+                    material_instance.set_material_static_switch_parameter('Alpha', True)
+
+                if "decal" in slot_name:
+                    material_instance.set_material_static_switch_parameter('Decal', True)
 
 
     #Re-assign parent of instances, useful if someone goes from global_opacity to not having global_opacity (and the opossite)
@@ -336,13 +352,13 @@ class geometry:
             check_material_existance(slot, import_folder, assets_folder, global_opacity, opacity_items)
 
 
-    #import geom
+    #import geometry
     def _import(map_name, map_folder, import_folder, greyhound_folder, assets_folder, global_opacity, opacity_items, map_extension):
 
         with open(f"{map_folder}\\{map_name}_matdata.json", "r") as file:
             mat_data = json.load(file)
 
-        not_imported = False
+
         for model in mat_data['Materials']:
             model_name = clean(model)
 
@@ -350,22 +366,21 @@ class geometry:
                 ue.load_object(mesh_class, f"{import_folder}MapGeo/{map_name}/{map_name}_{model_name}.{map_name}_{model_name}")
 
             except:
-                not_imported = True
+
+                fbx_factory = PyFbxFactory()
+                obj = f"{map_folder}\\{map_name}{map_extension}"
+
+                # configure the factory
+                fbx_factory.ImportUI.bCreatePhysicsAsset = False
+                fbx_factory.ImportUI.bImportMaterials = False
+                fbx_factory.ImportUI.bImportTextures = False
+                fbx_factory.ImportUI.bImportAnimations = False
+                fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = False
+                fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1
+
+                mesh = fbx_factory.factory_import_object(obj, f"{import_folder}MapGeo/{map_name}")
+
                 break
-
-        if not_imported:
-            fbx_factory = PyFbxFactory()
-            obj = f"{map_folder}\\{map_name}{map_extension}"
-
-            # configure the factory
-            fbx_factory.ImportUI.bCreatePhysicsAsset = False
-            fbx_factory.ImportUI.bImportMaterials = False
-            fbx_factory.ImportUI.bImportTextures = False
-            fbx_factory.ImportUI.bImportAnimations = False
-            fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = False
-            fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
-
-            mesh = fbx_factory.factory_import_object(obj, f"{import_folder}MapGeo/{map_name}")
 
         #Import materials and assign them
         geometry.import_materials(map_name, map_folder, import_folder, greyhound_folder, assets_folder, global_opacity, opacity_items)
@@ -389,7 +404,6 @@ class geometry:
             model_slot = clean(material_info)
             material_name = model_slot
             model_name = f"{map_name}_{clean(material_info)}"
-
 
             #Actually start assigning the material
             asset = ue.load_object(mesh_class, f"{import_folder}MapGeo/{map_name}/{model_name}.{model_name}")
@@ -476,15 +490,17 @@ class geometry:
                     fbx_factory.ImportUI.bImportTextures = False
                     fbx_factory.ImportUI.bImportAnimations = False
                     fbx_factory.ImportUI.StaticMeshImportData.bCombineMeshes = False
-                    fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1;
+                    fbx_factory.ImportUI.SkeletalMeshImportData.ImportUniformScale = 1
 
                     mesh = fbx_factory.factory_import_object(obj, f"{import_folder}MapGeo/{individual_obj_name}")
 
                     if map_extension != '.fbx':
                         os.remove(f"{map_folder}\\{individual_obj_name}.obj")
 
-                    #Import materials and assign them
-                    geometry.import_materials(map_name, map_folder, import_folder, greyhound_folder, assets_folder, global_opacity, opacity_items)
+                    break
+
+                #Import materials and assign them
+                geometry.import_materials(map_name, map_folder, import_folder, greyhound_folder, assets_folder, global_opacity, opacity_items)
 
                 for material_info in models:
                     for model_number in range(1, material_info['Number'] + 1):
@@ -501,8 +517,6 @@ class geometry:
                             if model_name_only in material.MaterialSlotName:
                                 if material.MaterialInterface != selected_material:
                                     asset.set_material(index, selected_material)
-
-                break
 
 
     #Place geometry (applies for both individual and not individual objects geometry)
@@ -550,7 +564,7 @@ class geometry:
 
                         geometry_settings = ue.get_editor_world().actor_spawn(StaticMeshActor)
                         geometry_settings.attach_to_actor(geometry_cube)
-                        geometry_settings.set_actor_scale( 0.3937, 0.3937, 0.3937 );
+                        geometry_settings.set_actor_scale( 0.3937, 0.3937, 0.3937 )
                         geometry_settings.StaticMeshComponent.StaticMesh = asset
                         geometry_settings.set_actor_label(clean(f"{geometry_info['Model']}{model_number}"))
 
@@ -572,13 +586,12 @@ class geometry:
 
                 except:
                     not_imported = True
+
+                    print("Seems like the geometry is not imported! (or not imported correctly)")
                     break
 
-            if not_imported:
-                print("Seems like the geometry is not imported! (or not imported correctly)")
-
             #If it is imported then place it
-            else:
+            if not not_imported:
                 for model_name in mat_data['Materials']:
 
                     full_asset_name = clean(f"{map_name}_{model_name}")
@@ -587,7 +600,7 @@ class geometry:
 
                     geometry_settings = ue.get_editor_world().actor_spawn(StaticMeshActor)
                     geometry_settings.attach_to_actor(geometry_cube)
-                    geometry_settings.set_actor_scale( 0.3937, 0.3937, 0.3937 );
+                    geometry_settings.set_actor_scale( 0.3937, 0.3937, 0.3937 )
                     geometry_settings.StaticMeshComponent.StaticMesh = asset
                     geometry_settings.set_actor_label(full_asset_name)
 

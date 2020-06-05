@@ -1,3 +1,9 @@
+#Welcome to my code. This code is not the cleanest. If there was any type of error qt crashes and unreal engine with it, so, I had to "convert"
+#the whole thing to a (almost) crash proof program. There are a lot of extra ifs, try and excepts, and etc because of this.
+#Still, I think the whole idea behind every function is pretty interesting. I actually built this program 3 times before landing on this.
+
+version = 1.5
+
 #Main settings
 from necessary import *
 from functions import *
@@ -5,8 +11,8 @@ from functions import *
 json_location = f"{current_path}\\save.json"
 
 if not os.path.isfile(json_location):
-    print("Does not exist.")
-    print(json_location)
+    print(f"Seems like {json_location} does not exist!")
+    print("Please re-download the plugin!")
     sys.exit(0)
 
 #Setup Settings
@@ -177,7 +183,7 @@ class Ui_MainWindow(QWidget):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "CoDtoUE"))
+        MainWindow.setWindowTitle(_translate("MainWindow", f"CoDtoUE - Release {version}"))
         self.main_settings_label.setText(_translate("MainWindow", "Settings"))
         self.map_folder_label.setText(_translate("MainWindow", "Map Obj"))
         self.greyhound_directory_label.setText(_translate("MainWindow", "Greyhound Directory:"))

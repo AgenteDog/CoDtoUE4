@@ -58,20 +58,6 @@ def clean(text):
 
     return new_text
 
-#Select master material
-def select_master_material(global_opacity, opacity_items, name, import_folder, assets_folder):
-
-    if not global_opacity:
-        if any(item in name for item in (opacity_items)):
-             return ue.load_object(material_class, f"{assets_folder}MasterMat_Opacity.MasterMat_Opacity")
-
-        else:
-            return ue.load_object(material_class, f"{assets_folder}MasterMat.MasterMat")
-
-    else:
-        return ue.load_object(material_class, f"{assets_folder}MasterMat_Opacity.MasterMat_Opacity")
-
-
 #Import textures
 def import_texture(texture_name, import_folder, greyhound_folder, assets_folder):
 
@@ -178,23 +164,14 @@ def check_material_existance(name, import_folder, assets_folder, global_opacity,
 
     material = ue.load_object(material_instance_class, f"{import_folder}materials/{name}.{name}")
 
-
     if not global_opacity and any(item in name for item in (opacity_items)) or any(item in model for item in (opacity_items)):
-        opacity_mat = ue.load_object(material_class, f"{assets_folder}MasterMat_Opacity.MasterMat_Opacity")
-        if material.Parent != opacity_mat:
-            material.set_material_parent(opacity_mat)
-
+        material.set_material_static_switch_parameter('Alpha', True)
 
     elif not global_opacity:
-        normal_mat = ue.load_object(material_class, f"{assets_folder}MasterMat.MasterMat")
-        if material.Parent != normal_mat:
-            material.set_material_parent(normal_mat)
+        material.set_material_static_switch_parameter('Alpha', False)
 
     elif global_opacity:
-        opacity_mat = ue.load_object(material_class, f"{assets_folder}MasterMat_Opacity.MasterMat_Opacity")
-        if material.Parent != opacity_mat:
-            material.set_material_parent(opacity_mat)
-
+        material.set_material_static_switch_parameter('Alpha', True)
 
 
 #Required for PyQt5

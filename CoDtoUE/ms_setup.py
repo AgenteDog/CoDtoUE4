@@ -3,10 +3,9 @@ import unreal_engine as ue
 # Initialize our main modules.
 ue.exec("ms_Init.py")
 
-# Open the user interface. This function is called by the mousePressEvent of the "Megascans" icon in the UE4 toolbar.
-
 project_path = f"{os.path.dirname(sys.argv[0])}"
 current_path = f"{project_path}/Plugins/CoDtoUE"
+
 def init_megascans_ui():
     ue.exec("UI.py")
 
