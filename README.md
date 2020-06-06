@@ -131,7 +131,7 @@ Go to **File > Import > Obj** and put these settings:
 Then, just go to **File > Export > Fbx** and export it. Make sure you export it with the same name of the obj file and it is saved in the same directory.
 
 **Important: If you are using a split OBJ file, name the FBX file like the original OBJ**
-
+**Important2: If you do this, activate the Individual Geometry Objects option while importing! Not doing this will cause a crash!**
 
 ## Common issues that people have:
 
