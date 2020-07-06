@@ -1,3 +1,5 @@
+I ended support for the tool.
+
 # CoDtoUE
 
 I am proud to say that this small project went from a script to a plugin. This plugin is better, faster and more optimized than the script. The plugin is still in beta so you might encounter crashes, if you do please report how or when the crash happened in the issues tab.
