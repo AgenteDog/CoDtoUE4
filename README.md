@@ -14,7 +14,7 @@ Currently, these are the Unreal Engine versions my plugin supports:
 - 4.20
 - 4.21
 - 4.22
-- 4.23
+- ~~4.23~~ It's bugged, probably wont work.
 - ~~4.24~~ This version has been temporally disabled (from the releases tab) due to some memory crash issues.
 
 More versions will be supported soon.
